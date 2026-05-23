@@ -274,6 +274,13 @@ export class GameScene extends Phaser.Scene {
     this.bossDefeated = false;
     this.isDialogActive = false;
     
+    // Anti-stuck system
+    this.waveStartTime = 0;
+    this.lastWaveEnemyCount = 0;
+    this.lastWaveProgressTime = 0;
+    this.STUCK_TIMEOUT = 8000; // 8 seconds for individual enemy
+    this.WAVE_STALL_TIMEOUT = 45000; // 45 seconds for wave progress
+    
     this.createMap();
     this.createCollision();
     this.createFx();
@@ -384,6 +391,24 @@ export class GameScene extends Phaser.Scene {
       repeat: -1,
       ease: 'Sine.easeInOut',
     });
+
+    // Castle HP bar in world space
+    const barY = this.castleAttackPoint.y - 180;
+    this.castleWorldHpBarBack = this.add.rectangle(this.castleAttackPoint.x, barY, 100, 12, 0x20323a, 0.9)
+      .setDepth(this.castleAttackPoint.y + 5);
+    this.castleWorldHpBar = this.add.rectangle(this.castleAttackPoint.x, barY, 96, 8, 0x64b5f6)
+      .setDepth(this.castleAttackPoint.y + 6);
+    this.castleWorldHpBarBorder = this.add.rectangle(this.castleAttackPoint.x, barY, 100, 12)
+      .setStrokeStyle(2, 0xffe0a3, 0.82)
+      .setFillStyle(0x000000, 0)
+      .setDepth(this.castleAttackPoint.y + 7);
+    this.castleWorldHpLabel = this.add.text(this.castleAttackPoint.x, barY - 14, 'CASTLE', {
+      fontFamily: 'Arial Black, Arial, sans-serif',
+      fontSize: '10px',
+      color: '#64b5f6',
+      stroke: '#1c2b33',
+      strokeThickness: 3,
+    }).setOrigin(0.5).setDepth(this.castleAttackPoint.y + 7);
   }
 
   createEnemyBaseObjective() {
@@ -723,7 +748,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   setupPhysics() {
-    this.redBaseBarrier = this.add.rectangle(18 * 64, 17.5 * 64, 2048, 640, 0x000000, 0).setOrigin(0.5);
+    this.redBaseBarrier = this.add.rectangle(18 * 64, 17.5 * 64, 4000, 640, 0x000000, 0).setOrigin(0.5);
     this.physics.add.existing(this.redBaseBarrier, true);
     this.physics.add.collider(
       this.player, 
@@ -886,6 +911,32 @@ export class GameScene extends Phaser.Scene {
       const playerDistance = Phaser.Math.Distance.Between(enemy.x, enemy.y, this.player.x, this.player.y);
       const castleDistance = Phaser.Math.Distance.Between(enemy.x, enemy.y, this.castleAttackPoint.x, this.castleAttackPoint.y);
 
+      // Anti-stuck detection: track enemy position changes
+      if (!ai._lastCheckPos) {
+        ai._lastCheckPos = new Phaser.Math.Vector2(enemy.x, enemy.y);
+        ai._lastMoveTime = time;
+        ai._stuckTeleports = 0;
+      }
+      const movedDist = Phaser.Math.Distance.Between(enemy.x, enemy.y, ai._lastCheckPos.x, ai._lastCheckPos.y);
+      if (movedDist > 10) {
+        ai._lastCheckPos.set(enemy.x, enemy.y);
+        ai._lastMoveTime = time;
+      }
+
+      // If enemy is stuck for too long, fix it
+      if (ai.waveEnemy && time - ai._lastMoveTime > this.STUCK_TIMEOUT) {
+        ai._stuckTeleports += 1;
+        if (ai._stuckTeleports >= 3) {
+          // Too many teleports = force kill this enemy
+          this.forceKillStuckEnemy(enemy);
+          return;
+        }
+        // Teleport enemy to a safe tile closer to castle
+        this.teleportEnemyTowardTarget(enemy, this.castleAttackPoint);
+        ai._lastMoveTime = time;
+        return;
+      }
+
       if (this.stats.phase === 'defense' && castleDistance < 72 && time > ai.nextAttackAt) {
         enemy.setVelocity(0, 0);
         enemy.play(this.getEnemyAnim(ai.kind, 'attack'), true);
@@ -981,7 +1032,20 @@ export class GameScene extends Phaser.Scene {
       return;
     }
 
-    if (this.spawnQueue.length === 0 && this.aliveWaveEnemies() === 0 && !this.waveCompleting) {
+    // Wave stall detection: if no enemies killed in WAVE_STALL_TIMEOUT, force-kill stuck ones
+    const currentAlive = this.aliveWaveEnemies();
+    if (this.spawnQueue.length === 0 && currentAlive > 0) {
+      if (currentAlive !== this.lastWaveEnemyCount) {
+        this.lastWaveEnemyCount = currentAlive;
+        this.lastWaveProgressTime = time;
+      } else if (time - this.lastWaveProgressTime > this.WAVE_STALL_TIMEOUT) {
+        // Force kill all stuck wave enemies
+        this.forceKillAllStuckWaveEnemies();
+        this.lastWaveProgressTime = time;
+      }
+    }
+
+    if (this.spawnQueue.length === 0 && currentAlive === 0 && !this.waveCompleting) {
       this.waveCompleting = true;
       this.time.delayedCall(700, () => {
         this.waveCompleting = false;
@@ -1064,6 +1128,9 @@ export class GameScene extends Phaser.Scene {
     this.stats.wave = waveNumber;
     this.spawnQueue = this.expandWave(wave);
     this.waveCompleting = false;
+    this.waveStartTime = this.time.now;
+    this.lastWaveEnemyCount = 0;
+    this.lastWaveProgressTime = this.time.now;
     this.showDialog(wave.chapterTitle || wave.title, wave.dialog, 4300);
     this.setObjective(`Survive ${wave.title}. Protect the castle.`, null);
 
@@ -1098,7 +1165,12 @@ export class GameScene extends Phaser.Scene {
 
   enterPreparation() {
     this.stats.phase = 'waiting';
-    this.healPlayer(1, false);
+    
+    // Player HP upgrade: +1 max HP per wave completed
+    this.stats.playerMaxHp += 1;
+    this.healPlayer(2, false);
+    this.spawnFloatingText(this.player.x, this.player.y - 70, '+1 MAX HP!', '#00ff88');
+    
     this.showDialog('Blacksmith', 'Quickly repair, train, or call another guard before the next wave.', 4600);
     this.setObjective(`Talk to the Village Elder to start Wave ${this.stats.wave + 1}.`, 'elder');
   }
@@ -1141,13 +1213,22 @@ export class GameScene extends Phaser.Scene {
     enemy.body.setSize(def.body[0], def.body[1]);
     enemy.body.setOffset(def.body[2], def.body[3]);
     
-    const scaleFactor = this.stats.bladeLevel - 1;
+    // Wave-based enemy scaling: enemies get stronger each wave
+    const waveNum = this.stats.wave || 1;
+    const hpBonus = Math.ceil((waveNum - 1) * 1); // +1 HP per wave
+    const speedBonus = (waveNum - 1) * 3; // +3 speed per wave
+    const damageBonus = Math.floor((waveNum - 1) / 3); // +1 damage every 3 waves
+    
+    const scaledHp = def.hp + hpBonus;
+    const scaledSpeed = def.speed + speedBonus;
+    const scaledDamage = def.damage + damageBonus;
+    
     enemy.ai = {
       kind,
-      health: def.hp + (scaleFactor * 2),
-      maxHealth: def.hp + (scaleFactor * 2),
-      speed: def.speed,
-      damage: def.damage + scaleFactor,
+      health: scaledHp,
+      maxHealth: scaledHp,
+      speed: scaledSpeed,
+      damage: scaledDamage,
       rewardGold: def.rewardGold,
       rewardWood: def.rewardWood,
       waveEnemy: Boolean(options.waveEnemy),
@@ -1328,6 +1409,7 @@ export class GameScene extends Phaser.Scene {
 
     this.healPlayer(Math.ceil(this.stats.playerMaxHp / 2));
     this.stats.castleHp = Math.min(this.stats.castleMaxHp, this.stats.castleHp + 10);
+    this.syncCastleWorldHpBar();
     this.spawnFloatingText(this.player.x, this.player.y - 60, 'HOLY HEAL!', '#00ff00');
     
     const aura = this.add.circle(this.player.x, this.player.y, 220, 0x00ff00, 0.4).setDepth(this.player.y + 10);
@@ -1500,6 +1582,7 @@ export class GameScene extends Phaser.Scene {
     this.stats.castleHp = Math.max(0, this.stats.castleHp - amount);
     this.spawnImpact(source?.x || this.castleAttackPoint.x, source?.y || this.castleAttackPoint.y, 0.36);
     this.cameras.main.shake(120, 0.004);
+    this.syncCastleWorldHpBar();
     if (this.stats.castleHp <= 0) {
       this.endGame('lose', 'castle');
     }
@@ -1523,6 +1606,7 @@ export class GameScene extends Phaser.Scene {
     this.stats.wood -= 5;
     this.stats.castleHp = Math.min(this.stats.castleMaxHp, this.stats.castleHp + 8);
     this.spawnFloatingText(this.castleAttackPoint.x, this.castleAttackPoint.y - 48, '+CASTLE', '#bdf7c5');
+    this.syncCastleWorldHpBar();
     this.sfx.heal();
   }
 
@@ -1780,6 +1864,9 @@ export class GameScene extends Phaser.Scene {
       this.baseHpBar.clear();
     }
 
+    // Sync castle world HP bar every frame
+    this.syncCastleWorldHpBar();
+
     const showUpgrades = this.canUpgrade() && !this.gameEnded;
     this.upgradePanel.clear();
     this.upgradePanel.setVisible(showUpgrades);
@@ -1890,6 +1977,99 @@ export class GameScene extends Phaser.Scene {
     enemy.hpBar.setPosition(enemy.x - (40 * (1 - ratio)) / 2, y)
       .setDisplaySize(40 * ratio, 5)
       .setDepth(enemy.y + 2);
+  }
+
+  syncCastleWorldHpBar() {
+    if (!this.castleWorldHpBar || !this.castleWorldHpBarBack) return;
+    const ratio = Phaser.Math.Clamp(this.stats.castleHp / this.stats.castleMaxHp, 0, 1);
+    const fullWidth = 96;
+    const barWidth = Math.max(0, fullWidth * ratio);
+    this.castleWorldHpBar.setDisplaySize(barWidth, 8);
+    this.castleWorldHpBar.setPosition(
+      this.castleAttackPoint.x - (fullWidth - barWidth) / 2,
+      this.castleWorldHpBar.y
+    );
+    // Color shift: blue → yellow → red based on HP ratio
+    if (ratio > 0.6) {
+      this.castleWorldHpBar.setFillStyle(0x64b5f6);
+    } else if (ratio > 0.3) {
+      this.castleWorldHpBar.setFillStyle(0xffc107);
+    } else {
+      this.castleWorldHpBar.setFillStyle(0xe74f4f);
+    }
+    // Update label
+    if (this.castleWorldHpLabel) {
+      this.castleWorldHpLabel.setText(`CASTLE ${this.stats.castleHp}/${this.stats.castleMaxHp}`);
+    }
+  }
+
+  teleportEnemyTowardTarget(enemy, target) {
+    // Find a safe reachable tile that's between enemy and target
+    const enemyTile = this.worldToTile(enemy.x, enemy.y);
+    const targetTile = this.worldToTile(target.x, target.y);
+    
+    // Try midpoint first, then closer to target
+    const candidates = [
+      { x: Math.round((enemyTile.x + targetTile.x) / 2), y: Math.round((enemyTile.y + targetTile.y) / 2) },
+      { x: Math.round(enemyTile.x + (targetTile.x - enemyTile.x) * 0.7), y: Math.round(enemyTile.y + (targetTile.y - enemyTile.y) * 0.7) },
+      { x: targetTile.x + 2, y: targetTile.y + 2 },
+      { x: targetTile.x - 2, y: targetTile.y + 2 },
+      { x: targetTile.x, y: targetTile.y + 3 },
+    ];
+    
+    for (const candidate of candidates) {
+      const safeTile = this.findSafeTile(candidate.x, candidate.y, 8, { reachableOnly: true });
+      if (safeTile && this.isSafeTile(safeTile.x, safeTile.y)) {
+        const worldPos = this.tileToWorld(safeTile.x, safeTile.y);
+        enemy.body.reset(worldPos.x, worldPos.y);
+        enemy.ai.lastSafePosition.set(worldPos.x, worldPos.y);
+        enemy.ai.path = [];
+        enemy.ai.pathTargetKey = null;
+        this.spawnImpact(worldPos.x, worldPos.y, 0.25);
+        return;
+      }
+    }
+    
+    // Absolute fallback: just kill the stuck enemy
+    this.forceKillStuckEnemy(enemy);
+  }
+
+  forceKillStuckEnemy(enemy) {
+    if (!enemy?.active) return;
+    // Give partial rewards
+    this.stats.gold += Math.ceil(enemy.ai.rewardGold / 2);
+    this.stats.wood += Math.ceil(enemy.ai.rewardWood / 2);
+    this.stats.kills += 1;
+    
+    const boom = this.add.sprite(enemy.x, enemy.y, 'explosion')
+      .setScale(0.3)
+      .setDepth(enemy.y + 40)
+      .play('explode');
+    boom.once('animationcomplete', () => boom.destroy());
+    
+    enemy.hpBar?.destroy();
+    enemy.hpBarBack?.destroy();
+    enemy.destroy();
+  }
+
+  forceKillAllStuckWaveEnemies() {
+    const stuckEnemies = [];
+    this.enemies.children.iterate((enemy) => {
+      if (!enemy?.active || !enemy.ai.waveEnemy) return;
+      // Check if enemy velocity is near zero (stuck)
+      const speed = Math.abs(enemy.body.velocity.x) + Math.abs(enemy.body.velocity.y);
+      if (speed < 5) {
+        stuckEnemies.push(enemy);
+      }
+    });
+    
+    stuckEnemies.forEach((enemy) => {
+      this.forceKillStuckEnemy(enemy);
+    });
+    
+    if (stuckEnemies.length > 0) {
+      this.spawnFloatingText(this.player.x, this.player.y - 60, `${stuckEnemies.length} stuck enemies cleared!`, '#ffaa00');
+    }
   }
 
   spawnImpact(x, y, scale = 0.42) {
