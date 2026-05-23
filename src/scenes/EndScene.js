@@ -35,7 +35,7 @@ export class EndScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.add.text(width / 2, 146, won
-      ? 'Asterfall selamat. Warga bertahan, castle berdiri, dan panji merah padam.'
+      ? 'Castle Piercer selamat. Warga bertahan, castle berdiri, dan panji merah padam.'
       : (this.reason === 'castle'
         ? 'Castle jatuh sebelum pasukan merah dipukul mundur.'
         : 'Hero gugur sebelum serangan balik selesai.'), {

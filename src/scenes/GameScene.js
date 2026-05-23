@@ -291,7 +291,7 @@ export class GameScene extends Phaser.Scene {
     this.createInput();
     this.setupPhysics();
     this.setupCamera();
-    this.showDialog('Village Elder', 'Asterfall has one night to survive. Talk to the elder, rally the guard, then hold the castle.', 5200);
+    this.showDialog('Village Elder', 'Castle Piercer has one night to survive. Talk to the elder, rally the guard, then hold the castle.', 5200);
     this.setObjective('Talk to the village elder.', 'elder');
   }
 
@@ -645,10 +645,10 @@ export class GameScene extends Phaser.Scene {
     };
     this.upgradePanel = fixed(this.add.graphics()).setVisible(false);
     this.upgradeButtons = [
-      this.createUpgradeButton(744, 438, 'Repair Castle', '5 wood', () => this.repairCastle()),
-      this.createUpgradeButton(744, 478, 'Sharpen Blade', '15 gold', () => this.upgradeBlade()),
-      this.createUpgradeButton(744, 518, 'Call Guard', '10 gold', () => this.hireGuard()),
-      this.createUpgradeButton(744, 558, 'Lifesteal', '25 gold', () => this.buyLifesteal()),
+      this.createUpgradeButton(860, 438, 'Repair Castle', '5 wood', () => this.repairCastle()),
+      this.createUpgradeButton(860, 478, 'Sharpen Blade', '15 gold', () => this.upgradeBlade()),
+      this.createUpgradeButton(860, 518, 'Call Guard', '10 gold', () => this.hireGuard()),
+      this.createUpgradeButton(860, 558, 'Lifesteal', '25 gold', () => this.buyLifesteal()),
     ];
   }
 
@@ -1783,12 +1783,7 @@ export class GameScene extends Phaser.Scene {
     const showUpgrades = this.canUpgrade() && !this.gameEnded;
     this.upgradePanel.clear();
     this.upgradePanel.setVisible(showUpgrades);
-    if (showUpgrades) {
-      this.upgradePanel.fillStyle(0x17242c, 0.76);
-      this.upgradePanel.fillRoundedRect(644, 422, 214, 150, 6);
-      this.upgradePanel.lineStyle(2, 0xb4885e, 0.68);
-      this.upgradePanel.strokeRoundedRect(644, 422, 214, 150, 6);
-    }
+    
     this.upgradeButtons.forEach(({ bg, text }) => {
       bg.setVisible(showUpgrades);
       text.setVisible(showUpgrades);

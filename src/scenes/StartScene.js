@@ -26,7 +26,7 @@ export class StartScene extends Phaser.Scene {
     titlePanel.lineStyle(4, 0x6b4b31, 0.84);
     titlePanel.strokeRoundedRect(width / 2 - 290, 42, 580, 124, 8);
 
-    this.add.text(width / 2, 72, 'ASTERFALL DEFENSE', {
+    this.add.text(width / 2, 72, 'CASTLE PIERCER', {
       fontFamily: 'Georgia, serif',
       fontSize: '38px',
       color: '#2a1e1b',

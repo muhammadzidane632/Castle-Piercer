@@ -8,7 +8,7 @@ export class PreloadScene extends Phaser.Scene {
 
   preload() {
     const { width, height } = this.scale;
-    const title = this.add.text(width / 2, height / 2 - 54, 'Asterfall Defense', {
+    const title = this.add.text(width / 2, height / 2 - 54, 'Castle Piercer', {
       fontFamily: 'Georgia, serif',
       fontSize: '34px',
       color: '#f7f0c4',
