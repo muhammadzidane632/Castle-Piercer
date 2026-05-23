@@ -1,0 +1,20 @@
+# Logs
+*.log
+
+# Node
+node_modules/
+
+# Build output
+dist/
+.vite/
+_analysis_map_preview.png
+
+# Local artifacts and backups
+artifacts/
+
+# OS generated files
+.DS_Store
+
+# Env files
+.env
+.env.local
