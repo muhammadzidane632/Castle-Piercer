@@ -38,6 +38,11 @@ const OBJECT_FALLBACKS = {
   blacksmith: [25, 4],
   healer: [23, 6],
   villager: [26, 6],
+  captain: [13, 5],
+  scout: [17, 10],
+  merchant: [28, 7],
+  aran: [18, 14],
+  healer_south: [20, 12],
   guard_1: [14, 6],
   guard_2: [12, 6],
   guard_3: [17, 10],
@@ -190,57 +195,237 @@ const ENEMY_DEFS = {
 };
 
 const NPCS = [
+  { id: 'elder', name: 'Tetua Desa', object: 'elder', texture: 'yellow-monk-idle', animation: 'yellow-monk-idle', scale: 0.5, avatar: 'avatar-01', lines: ['Lindungi kastil ini, Ksatria.', 'Desa ini bergantung padamu.', 'Aku percaya padamu.'] },
+  { id: 'blacksmith', name: 'Pandai Besi', object: 'blacksmith', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.52, avatar: 'avatar-18', lines: ['Bawa kayu dan emas, akan kuperbaiki segalanya.', 'Senjata terbaik butuh bahan terbaik.'] },
+  { id: 'captain', name: 'Kapten Jaga', object: 'captain', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.52, avatar: 'avatar-06', lines: ['Pos pertahanan aman, Ksatria.', 'Penjaga siap di posisi.'] },
+  { id: 'healer', name: 'Tabib', object: 'healer_south', texture: 'yellow-monk-idle', animation: 'yellow-monk-idle', scale: 0.46, avatar: 'avatar-03', lines: ['Sini, biar kuobati lukamu.', 'Istirahatlah sebentar.'] },
+  { id: 'villager', name: 'Warga Desa', object: 'villager', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.48, avatar: 'avatar-08', lines: ['Tolong lindungi kami, Ksatria.', 'Anak-anak kami bersembunyi di bawah tanah.'] },
+  { id: 'scout', name: 'Pengintai', object: 'scout', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.46, avatar: 'avatar-04', lines: ['Dari sini aku bisa lihat pergerakan musuh.', 'Musuh berkumpul di selatan.'] },
+  { id: 'merchant', name: 'Pedagang', object: 'merchant', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.5, avatar: 'avatar-09', lines: ['Mau beli sesuatu, Ksatria?', 'Daganganku terbatas di masa perang.'] },
+  { id: 'aran', name: 'Aran', object: 'aran', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.5, avatar: 'avatar-14', minChapter: 7, lines: ['Ksatria... ada yang harus kuceritakan.'] },
+];
+
+const CHAPTER_QUESTS = [
   {
-    id: 'elder',
-    name: 'Tetua Desa',
-    object: 'elder',
-    texture: 'yellow-monk-idle',
-    animation: 'yellow-monk-idle',
-    scale: 0.5,
-    lines: [
-      'Pasukan merah datang dari jalur timur. Lindungi kastil ini, Ksatria.',
-      'Jika kastil jatuh, seluruh desa kita akan musnah.',
-      'Aku sudah hidup lama di desa ini. Belum pernah aku melihat ancaman sebesar ini.',
+    chapter: 1, title: 'Bab 1: Bayangan di Perbatasan',
+    subQuests: [
+      { id: 'ch1_s1', npc: 'elder', title: 'Temui Tetua Desa', hint: 'Tetua Desa — Desa',
+        dialog: [
+          { speaker: 'elder', text: 'Ksatria, akhirnya kau tiba! Pengintai pasukan merah terlihat dari menara barat. Situasinya genting — kita butuh bantuanmu.', responses: ['Aku siap bertempur!', 'Seberapa besar ancamannya?'] },
+          { speaker: 'elder', text: 'Semangatmu luar biasa! Tapi jangan gegabah. Temui Pandai Besi di desa — dia punya pedang yang sudah disiapkan khusus untukmu.' },
+        ] },
+      { id: 'ch1_s2', npc: 'blacksmith', title: 'Ambil pedang dari Pandai Besi', hint: 'Pandai Besi — Desa',
+        dialog: [
+          { speaker: 'blacksmith', text: 'Ah, kau pasti ksatria yang dikirim Tetua! Ini, pedang terbaik yang pernah kutempa. Rawat baik-baik, ya.', responses: ['Terima kasih, akan kugunakan sebaik mungkin.', 'Pedang ini cukup tajam?'] },
+          { speaker: 'blacksmith', text: 'Haha, percayalah — pedang ini sudah menembus banyak baju besi! Sekarang, lapor ke Kapten Jaga di kastil. Dia yang atur strategi.' },
+        ] },
+      { id: 'ch1_s3', npc: 'captain', title: 'Lapor ke Kapten Jaga', hint: 'Kapten Jaga — Kastil',
+        dialog: [
+          { speaker: 'captain', text: 'Kau ksatria baru itu? Bagus. Posisikan dirimu dekat kastil — musuh datang dari barat.', responses: ['Siap, Kapten!', 'Berapa banyak penjaga kita?'] },
+          { speaker: 'captain', text: 'Dua penjaga di pos. Tidak banyak, tapi cukup kalau kau pimpin dari depan. Bilang Tetua Desa kalau kau sudah siap tempur!' },
+        ] },
     ],
+    mainQuest: { title: 'Hadapi Gelombang 1', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Semua sudah siap. Pengintai merah mulai bergerak dari barat. Pertahankan kastil kita!', responses: ['Untuk desa kita!', 'Kita pasti menang!'] },
+        { speaker: 'elder', text: 'Semoga para leluhur melindungi kita. Maju, Ksatria!' },
+      ] },
   },
   {
-    id: 'blacksmith',
-    name: 'Pandai Besi',
-    object: 'blacksmith',
-    texture: 'yellow-pawn-gold-idle',
-    animation: 'yellow-pawn-gold-idle',
-    scale: 0.52,
-    lines: [
-      'Bawa kayu dan emas. Aku bisa perbaiki tembok, asah pedangmu, atau panggil penjaga baru.',
-      'Pedangmu sudah tumpul, Ksatria. Bawa 15 emas dan akan kuasah sampai tajam.',
-      'Setiap prajurit butuh senjata yang layak. Jangan pelit dengan peralatanmu!',
+    chapter: 2, title: 'Bab 2: Barak Musuh',
+    subQuests: [
+      { id: 'ch2_s1', npc: 'healer', title: 'Temui Tabib di selatan', hint: 'Tabib — Area Selatan',
+        dialog: [
+          { speaker: 'healer', text: 'Ksatria! Pertempuran pertama sudah selesai, tapi lukamu perlu diobati. Sini, minum ramuan ini.', responses: ['Terima kasih, Tabib.', 'Aku baik-baik saja kok.'] },
+          { speaker: 'healer', text: 'Jangan sok kuat! Oh ya, Pengintai di menara tengah punya info tentang musuh. Temui dia.' },
+        ] },
+      { id: 'ch2_s2', npc: 'scout', title: 'Temui Pengintai', hint: 'Pengintai — Menara Tengah',
+        dialog: [
+          { speaker: 'scout', text: 'Ksatria! Dari menara ini aku lihat semuanya. Musuh punya barak di selatan — mereka kirim pemanah kali ini!', responses: ['Pemanah? Itu merepotkan.', 'Berapa jumlah mereka?'] },
+          { speaker: 'scout', text: 'Sekitar tujuh prajurit, tiga di antaranya pemanah. Hati-hati dengan panah mereka! Bilang Tetua kau sudah siap.' },
+        ] },
     ],
+    mainQuest: { title: 'Hadapi Gelombang 2', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Pemanah ikut menyerang kali ini. Kau siap, Ksatria?', responses: ['Selalu siap!', 'Aku akan berhati-hati.'] },
+        { speaker: 'elder', text: 'Jaga jarak dari pemanah mereka. Lindungi kastil!' },
+      ] },
   },
   {
-    id: 'healer',
-    name: 'Tabib',
-    object: 'healer',
-    texture: 'yellow-monk-idle',
-    animation: 'yellow-monk-idle',
-    scale: 0.46,
-    lines: [
-      'Tetap dekat denganku di antara pertempuran, akan kuobati lukamu.',
-      'Banyak yang terluka hari ini. Tapi selama kita masih berdiri, masih ada harapan.',
-      'Istirahatlah sebentar, Ksatria. Tubuhmu butuh pemulihan sebelum gelombang berikutnya.',
+    chapter: 3, title: 'Bab 3: Benteng Timur',
+    subQuests: [
+      { id: 'ch3_s1', npc: 'captain', title: 'Strategi dengan Kapten Jaga', hint: 'Kapten Jaga — Kastil',
+        dialog: [
+          { speaker: 'captain', text: 'Masalah besar! Benteng timur kirim ksatria berat. Lambat tapi kuat — satu pukulan bisa remukkan perisai.', responses: ['Kita butuh strategi baru.', 'Aku bisa tangani mereka.'] },
+          { speaker: 'captain', text: 'Pertahankan jembatan — titik sempit yang bisa kita manfaatkan. Tapi kita butuh senjata lebih tajam. Temui Pandai Besi!' },
+        ] },
+      { id: 'ch3_s2', npc: 'blacksmith', title: 'Senjata baru dari Pandai Besi', hint: 'Pandai Besi — Desa', requireResource: { type: 'wood', amount: 3 },
+        failDialog: 'Kau butuh minimal 3 kayu dulu. Cari di sekitar hutan.',
+        dialog: [
+          { speaker: 'blacksmith', text: 'Ksatria berat, ya? Bawa 3 kayu, akan kutempa ulang pedangmu jadi lebih tajam.', responses: ['Ini kayunya.', 'Bisa lebih tajam lagi?'] },
+          { speaker: 'blacksmith', text: 'Sempurna! Pedangmu sekarang bisa tembus baju besi. Hati-hati di jembatan, Ksatria!' },
+        ] },
     ],
+    mainQuest: { title: 'Hadapi Gelombang 3', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Ksatria berat dari timur sudah dekat. Jembatan adalah kunci pertahanan kita!', responses: ['Jembatan tidak akan jatuh!', 'Demi kastil!'] },
+        { speaker: 'elder', text: 'Pertahankan jembatan itu. Mereka tidak boleh lewat!' },
+      ] },
   },
   {
-    id: 'villager',
-    name: 'Warga Desa',
-    object: 'villager',
-    texture: 'yellow-pawn-gold-idle',
-    animation: 'yellow-pawn-gold-idle',
-    scale: 0.48,
-    lines: [
-      'Markas musuh ada di seberang jembatan bawah. Bertahan dari gelombang mereka, lalu serang panji mereka!',
-      'Aku dengar bisik-bisik... katanya ada pengkhianat di antara kita. Hati-hati, Ksatria.',
-      'Anak-anak kami bersembunyi di bawah tanah. Tolong jangan biarkan musuh sampai ke sini.',
+    chapter: 4, title: 'Bab 4: Serangan Dua Arah',
+    subQuests: [
+      { id: 'ch4_s1', npc: 'villager', title: 'Tenangkan Warga Desa', hint: 'Warga Desa — Desa',
+        dialog: [
+          { speaker: 'villager', text: 'Ksatria! Ibu-ibu menangis, anak-anak ketakutan... Katanya musuh serang dari dua arah!', responses: ['Tenanglah, aku lindungi kalian.', 'Dari mana kau dengar itu?'] },
+          { speaker: 'villager', text: 'Terima kasih, Ksatria... Pedagang di timur bilang dia lihat pasukan dari barat dan selatan. Oh, Tabib juga butuh bantuanmu!' },
+        ] },
+      { id: 'ch4_s2', npc: 'healer', title: 'Perbekalan dari Tabib', hint: 'Tabib — Area Selatan',
+        dialog: [
+          { speaker: 'healer', text: 'Lukamu dari lalu belum sembuh total. Minum ini — ramuan khusus meningkatkan daya tahan.', responses: ['Rasanya aneh tapi terima kasih.', 'Apa ini aman?'] },
+          { speaker: 'healer', text: 'Haha, aman! Ramuanku sudah selamatkan banyak nyawa. Pergilah, Tetua Desa menunggumu.' },
+        ] },
     ],
+    mainQuest: { title: 'Hadapi Gelombang 4', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Mereka menyerang dari dua arah sekaligus! Desa dikepung!', responses: ['Aku akan lindungi semua sisi!', 'Kita butuh bantuan.'] },
+        { speaker: 'elder', text: 'Kau adalah harapan kami. Maju dan lindungi desa ini!' },
+      ] },
+  },
+  {
+    chapter: 5, title: 'Bab 5: Perbatasan Jauh',
+    subQuests: [
+      { id: 'ch5_s1', npc: 'elder', title: 'Tetua curiga mata-mata', hint: 'Tetua Desa — Desa',
+        dialog: [
+          { speaker: 'elder', text: 'Ksatria, ada yang tidak beres. Bagaimana musuh tahu jalur rahasia kita? Aku curiga ada mata-mata!', responses: ['Siapa yang kau curigai?', 'Aku akan cari tahu.'] },
+          { speaker: 'elder', text: 'Aku tidak yakin siapa... Tanya Pengintai di menara — dia mungkin lihat sesuatu yang mencurigakan.' },
+        ] },
+      { id: 'ch5_s2', npc: 'scout', title: 'Interogasi Pengintai', hint: 'Pengintai — Menara Tengah',
+        dialog: [
+          { speaker: 'scout', text: 'Mata-mata? Hmm... Beberapa malam lalu aku lihat bayangan mencurigakan di dekat selatan. Tapi aku tidak yakin siapa.', responses: ['Bisa kau tunjukkan lokasinya?', 'Kita harus lebih waspada.'] },
+          { speaker: 'scout', text: 'Dekat area pedagang timur. Tapi hati-hati — kalau memang ada mata-mata, dia pasti sudah tahu kita curiga. Cek Pedagang di timur!' },
+        ] },
+      { id: 'ch5_s3', npc: 'merchant', title: 'Cek Pedagang di timur', hint: 'Pedagang — Area Timur',
+        dialog: [
+          { speaker: 'merchant', text: 'Mata-mata? Aku? Jangan asal tuduh, Ksatria! Aku cuma pedagang. Tapi... aku memang lihat seseorang asing beberapa malam lalu.', responses: ['Siapa orang asing itu?', 'Di mana kau lihat dia?'] },
+          { speaker: 'merchant', text: 'Dia pakai jubah gelap, pergi ke arah selatan. Aku tidak kenal wajahnya. Mungkin ada hubungannya dengan penyusup yang masuk...' },
+        ] },
+    ],
+    mainQuest: { title: 'Hadapi Gelombang 5', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Penyusup dari perbatasan jauh! Mereka tahu jalur rahasia kita. Ada pengkhianat di antara kita...', responses: ['Kita akan temukan dia.', 'Sekarang, fokus bertahan dulu.'] },
+        { speaker: 'elder', text: 'Kau benar, pertahanan dulu. Kita selidiki nanti. Maju, Ksatria!' },
+      ] },
+  },
+  {
+    chapter: 6, title: 'Bab 6: Gelombang Selatan',
+    subQuests: [
+      { id: 'ch6_s1', npc: 'healer', title: 'Tabib laporkan korban', hint: 'Tabib — Area Selatan',
+        dialog: [
+          { speaker: 'healer', text: 'Ksatria... Banyak yang terluka parah. Aku sudah kehabisan ramuan. Gelombang besar datang dari selatan.', responses: ['Kita akan bertahan.', 'Apa yang bisa kubantu?'] },
+          { speaker: 'healer', text: 'Bertahanlah, itu saja yang bisa kau lakukan. Oh, Kapten Jaga ingin bicara soal rencana pertahanan baru.' },
+        ] },
+      { id: 'ch6_s2', npc: 'captain', title: 'Rencana pertahanan baru', hint: 'Kapten Jaga — Kastil',
+        dialog: [
+          { speaker: 'captain', text: 'Situasinya buruk. Serbuan massal dari selatan. Aku atur penjaga di posisi, tapi kita butuh lebih banyak emas untuk memperkuat pertahanan.', responses: ['Aku akan kumpulkan emas.', 'Penjaga kita cukup?'] },
+          { speaker: 'captain', text: 'Kumpulkan emas dari sekitar peta. Setelah siap, temui Tetua Desa. Ini akan jadi pertempuran terberat sejauh ini.' },
+        ] },
+    ],
+    mainQuest: { title: 'Hadapi Gelombang 6', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Gelombang besar dari selatan! Ini akan jadi pertempuran terberat. Kau siap?', responses: ['Aku tidak akan mundur!', 'Demi semua orang di desa ini!'] },
+        { speaker: 'elder', text: 'Semangat! Berdiri tegak dan lindungi kastil sampai akhir!' },
+      ] },
+  },
+  {
+    chapter: 7, title: 'Bab 7: Serangan Balik!',
+    subQuests: [
+      { id: 'ch7_s1', npc: 'aran', title: 'Temui Aran di selatan', hint: 'Aran — Area Selatan',
+        dialog: [
+          { speaker: 'aran', text: 'Ksatria... Ini aku, Aran. Maafkan aku. Akulah yang membocorkan posisi kita ke musuh. Keluargaku disandera mereka.', responses: ['Kau... pengkhianat?!', 'Kenapa kau lakukan ini?'] },
+          { speaker: 'aran', text: 'Aku tahu kau marah. Tapi sekarang aku ingin menebus dosaku. Biar kutunjukkan jalan ke markas mereka. Bicarakan ini dengan Tetua Desa.' },
+        ] },
+      { id: 'ch7_s2', npc: 'elder', title: 'Rencana serangan balik', hint: 'Tetua Desa — Desa',
+        dialog: [
+          { speaker: 'elder', text: 'Jadi Aran yang selama ini... Aku kecewa, tapi kita butuh informasinya. Musuh sudah mundur — ini kesempatan kita menyerang!', responses: ['Aku percaya Aran ingin menebus dosa.', 'Kita harus waspada terhadap Aran.'] },
+          { speaker: 'elder', text: 'Baiklah. Kita manfaatkan pengetahuannya. Siapkan peralatan dari Pandai Besi, lalu kita mulai serangan balik!' },
+        ] },
+      { id: 'ch7_s3', npc: 'blacksmith', title: 'Persiapan serangan balik', hint: 'Pandai Besi — Desa',
+        dialog: [
+          { speaker: 'blacksmith', text: 'Serangan balik?! Akhirnya! Ini peralatan tempur terbaik yang kumiliki. Hancurkan mereka, Ksatria!', responses: ['Terima kasih, Pandai Besi!', 'Ini pertempuran terakhir?'] },
+          { speaker: 'blacksmith', text: 'Belum tentu terakhir, tapi ini awal dari kemenangan kita! Temui Tetua Desa kalau sudah siap.' },
+        ] },
+    ],
+    mainQuest: { title: 'Serang Markas Merah!', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Kastil berdiri tegak. Aran akan tunjukkan jalan. Seberangi jembatan dan hancurkan markas merah!', responses: ['Untuk desa kita!', 'Akhirnya kita menyerang!'] },
+        { speaker: 'elder', text: 'Dewa-dewa menyertaimu, Ksatria. Akhiri perang ini!' },
+      ] },
+  },
+  {
+    chapter: 8, title: 'Bab 8: Menembus Garis Pertahanan',
+    subQuests: [
+      { id: 'ch8_s1', npc: 'aran', title: 'Aran tunjukkan jalan', hint: 'Aran — Area Selatan',
+        dialog: [
+          { speaker: 'aran', text: 'Lewat sini, Ksatria! Aku tahu titik lemah pertahanan mereka. Mereka simpan pasukan terkuat di kastil merah.', responses: ['Tunjukkan jalannya!', 'Bagaimana kalau ini jebakan?'] },
+          { speaker: 'aran', text: 'Aku bersumpah dengan nyawaku — ini bukan jebakan. Aku sudah kehilangan segalanya karena mereka. Cepat, sebelum mereka sadar!' },
+        ] },
+      { id: 'ch8_s2', npc: 'captain', title: 'Koordinasi dengan Kapten', hint: 'Kapten Jaga — Kastil',
+        dialog: [
+          { speaker: 'captain', text: 'Aran memberi info bagus. Aku kirim penjaga mendampingimu. Kita serang dari dua sisi — kau dari depan, penjaga dari samping.', responses: ['Strategi yang bagus!', 'Penjaga kita cukup?'] },
+          { speaker: 'captain', text: 'Cukup atau tidak, kita harus coba. Ini kesempatan terbaik kita. Temui Tetua Desa untuk memulai serangan!' },
+        ] },
+    ],
+    mainQuest: { title: 'Tembus Pertahanan Musuh', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Aran dan Kapten sudah siapkan rencana. Tembus pertahanan mereka, Ksatria!', responses: ['Kita pasti bisa!', 'Aku tidak akan gagal.'] },
+        { speaker: 'elder', text: 'Maju, Ksatria! Seluruh desa mendoakanmu!' },
+      ] },
+  },
+  {
+    chapter: 9, title: 'Bab 9: Panji Merah',
+    subQuests: [
+      { id: 'ch9_s1', npc: 'blacksmith', title: 'Senjata terakhir', hint: 'Pandai Besi — Desa',
+        dialog: [
+          { speaker: 'blacksmith', text: 'Ini pedang terakhir yang bisa kutempa. Seluruh keahlianku kutuangkan di sini. Gunakan dengan bijak, Ksatria!', responses: ['Ini pedang terbaik yang pernah kupegang.', 'Aku berjanji akan mengembalikannya.'] },
+          { speaker: 'blacksmith', text: 'Haha, kembalikan kalau masih utuh! Satu serangan lagi dan panji merah akan jatuh. Temui Tetua untuk doa terakhir.' },
+        ] },
+      { id: 'ch9_s2', npc: 'elder', title: 'Doa sebelum pertempuran', hint: 'Tetua Desa — Desa',
+        dialog: [
+          { speaker: 'elder', text: 'Ksatria, sebelum kau maju... Biarkan aku berdoa untuk keselamatanmu. Kau sudah berjuang lebih dari siapapun.', responses: ['Terima kasih, Tetua.', 'Doakan juga semua prajurit kita.'] },
+          { speaker: 'elder', text: 'Aku doakan semua. Sekarang pergilah — hancurkan panji merah dan akhiri mimpi buruk ini!' },
+        ] },
+    ],
+    mainQuest: { title: 'Hancurkan Panji Merah', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Panji merah masih berkibar. Pasukan mereka bertahan mati-matian. Tapi kita tidak akan mundur!', responses: ['Panji itu akan jatuh hari ini!', 'Demi semua yang sudah berkorban!'] },
+        { speaker: 'elder', text: 'Maju, Ksatria! Ini hampir berakhir!' },
+      ] },
+  },
+  {
+    chapter: 10, title: 'Bab 10: Pertempuran Terakhir',
+    subQuests: [
+      { id: 'ch10_s1', npc: 'aran', title: 'Rencana serangan Aran', hint: 'Aran — Area Selatan',
+        dialog: [
+          { speaker: 'aran', text: 'Dua Tombak Hitam menjaga kastil merah. Ini rencana terakhirku — aku alihkan perhatian yang satu, kau hadapi yang lain.', responses: ['Kau yakin bisa?', 'Hati-hati, Aran.'] },
+          { speaker: 'aran', text: 'Ini penebusan dosaku, Ksatria. Apapun yang terjadi... jangan biarkan pengorbananku sia-sia. Bicara Kapten untuk atur formasi.' },
+        ] },
+      { id: 'ch10_s2', npc: 'captain', title: 'Atur formasi terakhir', hint: 'Kapten Jaga — Kastil',
+        dialog: [
+          { speaker: 'captain', text: 'Formasi terakhir sudah kuatur. Semua penjaga akan maju bersamamu. Ini pertempuran terakhir kita, Ksatria.', responses: ['Kita selesaikan ini bersama!', 'Untuk kerajaan kita!'] },
+          { speaker: 'captain', text: 'Untuk kerajaan! Temui Tetua Desa untuk pesan terakhir sebelum kita maju.' },
+        ] },
+      { id: 'ch10_s3', npc: 'elder', title: 'Pesan terakhir Tetua', hint: 'Tetua Desa — Desa',
+        dialog: [
+          { speaker: 'elder', text: 'Ksatria... Kau sudah berjuang luar biasa. Apapun yang terjadi hari ini, namamu akan dikenang selamanya.', responses: ['Aku tidak akan mengecewakan kalian.', 'Ini kehormatan bagiku, Tetua.'] },
+          { speaker: 'elder', text: 'Pergilah, pahlawan kami. Akhiri perang ini — desa ini, kastil ini, semuanya bergantung padamu.' },
+        ] },
+    ],
+    mainQuest: { title: 'Pertempuran Terakhir!', triggerNpc: 'elder',
+      triggerDialog: [
+        { speaker: 'elder', text: 'Ini dia. Pertempuran terakhir. Dua Tombak Hitam menunggu. Aran sudah siap di posisinya. Akhiri perang ini!', responses: ['UNTUK DESA KITA!', 'Akhirnya... ini berakhir hari ini!'] },
+        { speaker: 'elder', text: 'MAJU, KSATRIA! MENANGKAN PERANG INI!' },
+      ] },
   },
 ];
 
@@ -292,12 +477,18 @@ export class GameScene extends Phaser.Scene {
     this.bossDefeated = false;
     this.isDialogActive = false;
     
+    // Quest system
+    this.questState = { currentChapter: 1, subQuestProgress: 0, mainQuestReady: false };
+    this.dialogChain = null;
+    this.dialogChainIndex = 0;
+    this.dialogOnComplete = null;
+    
     // Anti-stuck system
     this.waveStartTime = 0;
     this.lastWaveEnemyCount = 0;
     this.lastWaveProgressTime = 0;
-    this.STUCK_TIMEOUT = 8000; // 8 seconds for individual enemy
-    this.WAVE_STALL_TIMEOUT = 45000; // 45 seconds for wave progress
+    this.STUCK_TIMEOUT = 8000;
+    this.WAVE_STALL_TIMEOUT = 45000;
     
     this.createMap();
     this.createCollision();
@@ -316,8 +507,10 @@ export class GameScene extends Phaser.Scene {
     this.createInput();
     this.setupPhysics();
     this.setupCamera();
-    this.showDialog('Tetua Desa', 'Kastil kita hanya punya satu malam untuk bertahan. Bicara dengan Tetua Desa, kumpulkan penjaga, dan pertahankan kastil sampai fajar!', 5200);
-    this.setObjective('Bicara dengan Tetua Desa.', 'elder');
+    this.stats.phase = 'quest';
+    this.updateQuestTracker();
+    this.updateQuestMarkers();
+    this.showDialog('Tetua Desa', 'Selamat datang, Ksatria! Kastil kita terancam. Temui aku di desa untuk membahas rencana pertahanan.', 5200, 'avatar-01');
   }
 
   createMap() {
@@ -501,6 +694,21 @@ export class GameScene extends Phaser.Scene {
         stroke: '#1c2b33',
         strokeThickness: 3,
       }).setOrigin(0.5).setDepth(pos.y + 1);
+      // Quest marker "!" above NPC
+      npc.questMarker = this.add.text(pos.x, pos.y - 72, '!', {
+        fontFamily: 'Arial Black',
+        fontSize: '22px',
+        color: '#ffd700',
+        stroke: '#3d2817',
+        strokeThickness: 5,
+      }).setOrigin(0.5).setDepth(pos.y + 2).setVisible(false);
+      // Bounce animation for quest marker
+      this.tweens.add({ targets: npc.questMarker, y: pos.y - 82, duration: 500, yoyo: true, repeat: -1, ease: 'Sine.easeInOut' });
+      // Hide NPCs with minChapter
+      if (config.minChapter) {
+        npc.setVisible(false);
+        npc.nameTag.setVisible(false);
+      }
       this.npcs.push(npc);
     });
 
@@ -631,18 +839,32 @@ export class GameScene extends Phaser.Scene {
       strokeThickness: 3,
     }));
 
-    this.objectivePanel = fixed(this.add.graphics());
-    this.objectiveTitle = fixed(this.add.text(756, 34, 'MISI', {
+    this.questPanel = fixed(this.add.graphics());
+    this.questChapterText = fixed(this.add.text(756, 30, '', {
       fontFamily: 'Arial Black, Arial, sans-serif',
       fontSize: '11px',
       color: '#6b4b31',
     }));
-    this.objectiveText = fixed(this.add.text(756, 58, '', {
+    this.questMainText = fixed(this.add.text(756, 50, '', {
+      fontFamily: 'Arial Black, Arial, sans-serif',
+      fontSize: '11px',
+      color: '#8b4513',
+    }));
+    this.questSubTexts = [];
+    for (let i = 0; i < 3; i++) {
+      this.questSubTexts.push(fixed(this.add.text(756, 72 + i * 18, '', {
+        fontFamily: 'Arial, sans-serif',
+        fontSize: '12px',
+        color: '#27333a',
+        wordWrap: { width: 180 },
+      })));
+    }
+    this.questNavText = fixed(this.add.text(756, 138, '', {
       fontFamily: 'Arial, sans-serif',
-      fontSize: '14px',
-      color: '#27333a',
-      wordWrap: { width: 166 },
-      lineSpacing: 4,
+      fontSize: '10px',
+      color: '#4a7c59',
+      fontStyle: 'italic',
+      wordWrap: { width: 180 },
     }));
     
     this.interactionHint = fixed(this.add.text(400, 480, 'Tekan [E] untuk bicara', {
@@ -653,21 +875,50 @@ export class GameScene extends Phaser.Scene {
       strokeThickness: 4,
     })).setOrigin(0.5).setVisible(false);
 
+    // RPG Dialog UI
     this.dialogPanel = fixed(this.add.graphics(), 10020).setVisible(false).setAlpha(0);
-    this.dialogTitle = fixed(this.add.text(300, 500, '', {
+    this.dialogPortrait = fixed(this.add.image(130, 478, 'avatar-01').setScale(1.1), 10022).setVisible(false).setAlpha(0);
+    this.dialogPortraitFrame = fixed(this.add.graphics(), 10021).setVisible(false).setAlpha(0);
+    this.dialogTitle = fixed(this.add.text(200, 440, '', {
       fontFamily: 'Arial Black, Arial, sans-serif',
       fontSize: '15px',
       color: '#fff1b8',
       stroke: '#16242c',
       strokeThickness: 3,
-    }), 10021).setVisible(false).setAlpha(0);
-    this.dialogText = fixed(this.add.text(300, 528, '', {
+    }), 10023).setVisible(false).setAlpha(0);
+    this.dialogText = fixed(this.add.text(200, 466, '', {
       fontFamily: 'Arial, sans-serif',
-      fontSize: '14px',
+      fontSize: '13px',
       color: '#edf7e8',
-      lineSpacing: 4,
-      wordWrap: { width: 370 },
-    }), 10021).setVisible(false).setAlpha(0);
+      lineSpacing: 3,
+      wordWrap: { width: 520 },
+    }), 10023).setVisible(false).setAlpha(0);
+    // Response buttons
+    this.dialogResponse1Bg = fixed(this.add.rectangle(280, 548, 280, 28, 0x3d5a1e, 0.92)
+      .setStrokeStyle(2, 0x7cba3f, 0.9)
+      .setInteractive({ cursor: 'pointer' }), 10024).setVisible(false).setAlpha(0);
+    this.dialogResponse1Text = fixed(this.add.text(280, 548, '', {
+      fontFamily: 'Arial, sans-serif', fontSize: '12px', color: '#d4f5a0',
+    }).setOrigin(0.5), 10025).setVisible(false).setAlpha(0);
+    this.dialogResponse2Bg = fixed(this.add.rectangle(580, 548, 280, 28, 0x3d5a1e, 0.92)
+      .setStrokeStyle(2, 0x7cba3f, 0.9)
+      .setInteractive({ cursor: 'pointer' }), 10024).setVisible(false).setAlpha(0);
+    this.dialogResponse2Text = fixed(this.add.text(580, 548, '', {
+      fontFamily: 'Arial, sans-serif', fontSize: '12px', color: '#d4f5a0',
+    }).setOrigin(0.5), 10025).setVisible(false).setAlpha(0);
+    // Continue prompt
+    this.dialogContinue = fixed(this.add.text(700, 548, '▶ Lanjutkan', {
+      fontFamily: 'Arial Black', fontSize: '12px', color: '#ffd700', stroke: '#16242c', strokeThickness: 2,
+    }).setOrigin(0.5).setInteractive({ cursor: 'pointer' }), 10025).setVisible(false).setAlpha(0);
+    // Response hover effects
+    this.dialogResponse1Bg.on('pointerover', () => this.dialogResponse1Bg.setFillStyle(0x4a7024, 0.95));
+    this.dialogResponse1Bg.on('pointerout', () => this.dialogResponse1Bg.setFillStyle(0x3d5a1e, 0.92));
+    this.dialogResponse2Bg.on('pointerover', () => this.dialogResponse2Bg.setFillStyle(0x4a7024, 0.95));
+    this.dialogResponse2Bg.on('pointerout', () => this.dialogResponse2Bg.setFillStyle(0x3d5a1e, 0.92));
+    // Response click handlers
+    this.dialogResponse1Bg.on('pointerdown', () => this.handleDialogResponse(0));
+    this.dialogResponse2Bg.on('pointerdown', () => this.handleDialogResponse(1));
+    this.dialogContinue.on('pointerdown', () => this.handleDialogResponse(-1));
 
     this.objectiveMarker = this.add.sprite(0, 0, 'red-arrow').setDepth(10010).setScrollFactor(0).setVisible(false);
     this.objectiveDistanceText = this.add.text(0, 0, '', {
@@ -749,13 +1000,17 @@ export class GameScene extends Phaser.Scene {
     this.input.on('pointerdown', (pointer) => {
       this.sfx.ensure();
       if (this.isDialogActive) {
+        // If dialog chain has responses showing, don't handle click here (buttons handle it)
+        if (this.dialogResponsesVisible) return;
         if (this.dialogReadyToClose) {
-          this.closeDialog();
+          this.advanceDialogChain();
         } else {
           this.dialogSkipped = true;
           this.dialogReadyToClose = true;
           if (this.dialogTypewriter) this.dialogTypewriter.remove(false);
           this.dialogText.setText(this.dialogBody);
+          // Show responses or continue after skip
+          this.showDialogActions();
         }
         return;
       }
@@ -841,13 +1096,15 @@ export class GameScene extends Phaser.Scene {
       
       if (Phaser.Input.Keyboard.JustDown(this.keys.attackA) || Phaser.Input.Keyboard.JustDown(this.keys.interact)) {
         this.sfx.ensure();
+        if (this.dialogResponsesVisible) return;
         if (this.dialogReadyToClose) {
-          this.closeDialog();
+          this.advanceDialogChain();
         } else {
           this.dialogSkipped = true;
           this.dialogReadyToClose = true;
           if (this.dialogTypewriter) this.dialogTypewriter.remove(false);
           this.dialogText.setText(this.dialogBody);
+          this.showDialogActions();
         }
       }
       return;
@@ -1093,6 +1350,7 @@ export class GameScene extends Phaser.Scene {
     this.npcs.forEach((npc) => {
       npc.setDepth(npc.y);
       npc.nameTag.setDepth(npc.y + 1);
+      if (npc.questMarker) npc.questMarker.setDepth(npc.y + 2);
     });
     this.sheep.forEach((sheep) => sheep.setDepth(sheep.y));
     this.resources.children.iterate((resource) => resource?.setDepth(resource.y + 10));
@@ -1117,52 +1375,67 @@ export class GameScene extends Phaser.Scene {
 
   interact() {
     const npc = this.getNearbyNpc();
-    if (!npc) {
-      return;
-    }
-
+    if (!npc) return;
     const data = npc.npcData;
+    
+    // During quest phase: check if this NPC has an active sub-quest
+    if (this.stats.phase === 'quest') {
+      const chapter = CHAPTER_QUESTS[this.questState.currentChapter - 1];
+      if (!chapter) return;
+      
+      const activeSubQuest = chapter.subQuests[this.questState.subQuestProgress];
+      
+      // Check if this NPC is the active sub-quest target
+      if (activeSubQuest && activeSubQuest.npc === data.id) {
+        // Check resource requirements
+        if (activeSubQuest.requireResource) {
+          const res = activeSubQuest.requireResource;
+          if (this.stats[res.type] < res.amount) {
+            this.showDialog(data.name, activeSubQuest.failDialog || `Kau butuh ${res.amount} ${res.type === 'gold' ? 'emas' : 'kayu'} dulu.`, 3000, data.avatar);
+            return;
+          }
+          // Deduct resources
+          this.stats[res.type] -= res.amount;
+        }
+        // Play sub-quest dialog chain
+        this.playDialogChain(activeSubQuest.dialog, () => {
+          this.completeSubQuest();
+        });
+        return;
+      }
+      
+      // Check if this NPC triggers the main quest (all sub-quests done)
+      if (this.questState.mainQuestReady && chapter.mainQuest.triggerNpc === data.id) {
+        this.playDialogChain(chapter.mainQuest.triggerDialog, () => {
+          this.time.delayedCall(800, () => this.startWave(this.questState.currentChapter));
+        });
+        return;
+      }
+      
+      // Main quest NPC but sub-quests not done
+      if (chapter.mainQuest.triggerNpc === data.id && !this.questState.mainQuestReady) {
+        this.showDialog(data.name, 'Persiapanmu belum selesai, Ksatria. Selesaikan semua misi kecil dulu sebelum kita mulai pertempuran.', 4000, data.avatar);
+        return;
+      }
+    }
+    
+    // Generic dialog for non-quest interactions
     let line = data.lines[Phaser.Math.Between(0, data.lines.length - 1)];
     
-    if (data.id === 'elder') {
-      if (this.stats.phase === 'intro') {
-        line = 'Pengintai merah pertama sudah terlihat di jalur. Bersiaplah, Ksatria!';
-        this.time.delayedCall(2000, () => this.startWave(1));
-      } else if (this.stats.phase === 'waiting') {
-        line = 'Musuh sedang menghimpun kekuatan. Pertahankan kastil dengan nyawamu!';
-        this.time.delayedCall(2000, () => this.startWave(this.stats.wave + 1));
-      } else if (this.stats.phase === 'defense') {
-        line = 'Fokus ke musuh! Jangan biarkan kastil jatuh!';
-      } else if (this.stats.phase === 'counter' || this.stats.phase === 'final') {
-        line = 'Kastil kita masih berdiri. Sekarang saatnya membalas mereka!';
-      }
-    } else if (data.id === 'blacksmith') {
-      if (this.stats.phase === 'defense') {
-        line = 'Aku tidak bisa menempa saat pertempuran berlangsung! Selesaikan dulu gelombangnya!';
-      } else if (this.stats.phase === 'waiting') {
-        line = 'Cepat, manfaatkan waktu istirahat ini! Perbaiki kastil atau asah pedangmu sebelum gelombang berikutnya!';
-      } else if (this.stats.phase === 'counter' || this.stats.phase === 'final') {
-        line = 'Kau sudah dekat dengan kemenangan! Hancurkan markas merah itu!';
-      }
-    } else if (data.id === 'healer') {
-      if (this.stats.phase === 'defense') {
-        line = 'Bertahanlah, Ksatria! Selesaikan pertempuran ini dulu, baru aku bisa mengobatimu.';
-      } else if (this.stats.phase === 'counter' || this.stats.phase === 'final') {
-        line = 'Lukamu parah... Sini, biar kuobati sebelum kau maju lagi ke markas mereka.';
-      }
-    } else if (data.id === 'villager') {
-      if (this.stats.phase === 'defense') {
-        line = 'Musuh masih menyerang! Kami bersembunyi di sini, tolong lindungi desa kami!';
-      } else if (this.stats.phase === 'waiting') {
-        line = 'Terima kasih sudah melindungi kami, Ksatria. Tapi aku khawatir gelombang berikutnya akan lebih besar...';
-      } else if (this.stats.wave >= 5) {
-        line = 'Ada yang aneh... Bagaimana musuh bisa tahu semua jalur rahasia kita? Pasti ada mata-mata!';
-      }
+    if (this.stats.phase === 'defense') {
+      if (data.id === 'elder') line = 'Fokus ke musuh! Jangan biarkan kastil jatuh!';
+      else if (data.id === 'blacksmith') line = 'Aku tidak bisa menempa saat pertempuran!';
+      else if (data.id === 'healer') line = 'Bertahanlah! Selesaikan pertempuran dulu!';
+      else if (data.id === 'captain') line = 'Pertahankan posisi! Musuh masih menyerang!';
+    } else if (this.stats.phase === 'counter' || this.stats.phase === 'final') {
+      if (data.id === 'elder') line = 'Kastil berdiri. Sekarang saatnya membalas!';
+      else if (data.id === 'aran') line = 'Hancurkan inti markas mereka, Ksatria!';
     }
-
-    this.showDialog(data.name, line, 4200);
-
-    if (data.id === 'healer' && (this.stats.phase === 'waiting' || this.stats.phase === 'counter' || this.stats.phase === 'final')) {
+    
+    this.showDialog(data.name, line, 4200, data.avatar);
+    
+    // Healer always heals during non-combat
+    if (data.id === 'healer' && this.stats.phase !== 'defense') {
       this.healPlayer(2);
       this.spawnFloatingText(this.player.x, this.player.y - 58, 'SEMBUH', '#bdf7c5');
     }
@@ -1181,7 +1454,9 @@ export class GameScene extends Phaser.Scene {
     this.waveStartTime = this.time.now;
     this.lastWaveEnemyCount = 0;
     this.lastWaveProgressTime = this.time.now;
-    this.showDialog(wave.speaker || wave.chapterTitle || wave.title, wave.dialog, 4300);
+    const speakerNpc = NPCS.find(n => n.name === (wave.speaker || 'Tetua Desa'));
+    this.showDialog(wave.speaker || wave.chapterTitle || wave.title, wave.dialog, 4300, speakerNpc?.avatar || 'avatar-01');
+    this.updateQuestMarkers();
     
     if (waveNumber >= 7) {
       this.setObjective(`Gelombang ${waveNumber}: Serang Markas Merah!`, this.enemyBasePoint);
@@ -1221,25 +1496,34 @@ export class GameScene extends Phaser.Scene {
   }
 
   enterPreparation() {
-    this.stats.phase = 'waiting';
-    
     // Player HP upgrade: +1 max HP per wave completed
     this.stats.playerMaxHp += 1;
     this.healPlayer(2, false);
     this.spawnFloatingText(this.player.x, this.player.y - 70, '+1 HP MAKS!', '#00ff88');
     
-    const prepDialogs = [
-      { speaker: 'Tetua Desa', line: 'Bagus! Tapi ini baru permulaan. Perkuat pertahananmu selagi sempat, Ksatria!' },
-      { speaker: 'Pandai Besi', line: 'Pedangmu tumpul dan temboknya retak. Bawa emas dan kayu, biar kuperbaiki semuanya!' },
-      { speaker: 'Tabib', line: 'Banyak yang terluka... Istirahatlah sebentar. Aku akan merawat yang bisa diselamatkan.' },
-      { speaker: 'Warga Desa', line: 'Aku dengar bisik-bisik soal pengkhianat di antara kita... Hati-hati, Ksatria.' },
-      { speaker: 'Tetua Desa', line: 'Bagaimana musuh bisa tahu jalur rahasia kita? Ada mata-mata! Kita harus waspada!' },
-      { speaker: 'Pandai Besi', line: 'Ini senjata terakhirku. Aku sudah menempa semua yang bisa kutempa. Gunakan dengan bijak!' },
-    ];
-    const prepIdx = Math.min(this.stats.wave - 1, prepDialogs.length - 1);
-    const prep = prepDialogs[prepIdx];
-    this.showDialog(prep.speaker, prep.line, 4600);
-    this.setObjective(`Bicara dengan Tetua Desa untuk memulai Gelombang ${this.stats.wave + 1}.`, 'elder');
+    // Advance to next chapter's quest phase
+    const nextChapter = this.questState.currentChapter + 1;
+    if (nextChapter > CHAPTER_QUESTS.length) {
+      this.unlockCounterAttack();
+      return;
+    }
+    this.questState.currentChapter = nextChapter;
+    this.questState.subQuestProgress = 0;
+    this.questState.mainQuestReady = false;
+    this.stats.phase = 'quest';
+    
+    // Show/hide NPCs based on chapter
+    this.npcs.forEach((npc) => {
+      if (npc.npcData.minChapter && npc.npcData.minChapter <= nextChapter) {
+        npc.setVisible(true);
+        npc.nameTag.setVisible(true);
+      }
+    });
+    
+    const chapter = CHAPTER_QUESTS[nextChapter - 1];
+    this.showDialog('Tetua Desa', `${chapter.title} dimulai! Selesaikan misi persiapan sebelum pertempuran berikutnya.`, 4600, 'avatar-01');
+    this.updateQuestTracker();
+    this.updateQuestMarkers();
   }
 
   unlockCounterAttack() {
@@ -1248,7 +1532,7 @@ export class GameScene extends Phaser.Scene {
     this.enemyCoreGlow.setVisible(true);
     this.enemyCoreFire.setVisible(true);
     this.spawnBaseDefenders();
-    this.showDialog('Tetua Desa', 'Kastil kita masih berdiri tegak! Sekarang seberangi jembatan dan hancurkan markas pasukan merah!', 5600);
+    this.showDialog('Tetua Desa', 'Kastil kita masih berdiri tegak! Sekarang seberangi jembatan dan hancurkan markas pasukan merah!', 5600, 'avatar-01');
     this.setObjective('Pergi ke markas merah dan kalahkan Tombak Hitam.', this.enemyBasePoint);
   }
 
@@ -1568,7 +1852,7 @@ export class GameScene extends Phaser.Scene {
     if (ai.boss) {
       this.bossDefeated = true;
       this.stats.phase = 'final';
-      this.showDialog('Aran', 'Penjaga panji sudah tumbang! Ksatria, ini kesempatanmu! Hancurkan inti markas mereka dan akhiri perang ini!', 5000);
+      this.showDialog('Aran', 'Penjaga panji sudah tumbang! Ksatria, ini kesempatanmu! Hancurkan inti markas mereka dan akhiri perang ini!', 5000, 'avatar-14');
       this.setObjective('Hancurkan inti markas merah.', this.enemyBasePoint);
     }
   }
@@ -1667,7 +1951,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (this.stats.wood < 5 || this.stats.castleHp >= this.stats.castleMaxHp) {
-      this.showDialog('Pandai Besi', 'Kayunya kurang, atau kastil sudah cukup kokoh.', 2600);
+      this.showDialog('Pandai Besi', 'Kayunya kurang, atau kastil sudah cukup kokoh.', 2600, 'avatar-18');
       return;
     }
     this.stats.wood -= 5;
@@ -1682,7 +1966,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (this.stats.gold < 15) {
-      this.showDialog('Pandai Besi', 'Pedangnya butuh 15 emas untuk diasah.', 2600);
+      this.showDialog('Pandai Besi', 'Pedangnya butuh 15 emas untuk diasah.', 2600, 'avatar-18');
       return;
     }
     this.stats.gold -= 15;
@@ -1697,7 +1981,7 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (this.stats.gold < 25) {
-      this.showDialog('Pandai Besi', 'Sihir gelap butuh 25 emas.', 2600);
+      this.showDialog('Pandai Besi', 'Sihir gelap butuh 25 emas.', 2600, 'avatar-18');
       return;
     }
     this.stats.gold -= 25;
@@ -1711,18 +1995,18 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (this.stats.gold < 10 || this.stats.guards >= this.guardHomePoints.length) {
-      this.showDialog('Pandai Besi', 'Emas tidak cukup, atau semua pos penjaga sudah terisi.', 2600);
+      this.showDialog('Pandai Besi', 'Emas tidak cukup, atau semua pos penjaga sudah terisi.', 2600, 'avatar-18');
       return;
     }
     this.stats.gold -= 10;
     this.spawnGuard(this.guardHomePoints[this.stats.guards]);
     this.stats.guards += 1;
-    this.showDialog('Kapten Jaga', 'Penjaga baru sudah siap di posisinya!', 2600);
+    this.showDialog('Kapten Jaga', 'Penjaga baru sudah siap di posisinya!', 2600, 'avatar-06');
     this.sfx.collect();
   }
 
   canUpgrade() {
-    return ['waiting', 'counter', 'final'].includes(this.stats.phase);
+    return ['quest', 'waiting', 'counter', 'final'].includes(this.stats.phase);
   }
 
   collectResource(player, resource) {
@@ -1778,6 +2062,7 @@ export class GameScene extends Phaser.Scene {
     let best = null;
     let bestDistance = 82;
     this.npcs.forEach((npc) => {
+      if (!npc.visible) return;
       const distance = Phaser.Math.Distance.Between(this.player.x, this.player.y, npc.x, npc.y);
       if (distance < bestDistance) {
         best = npc;
@@ -1790,13 +2075,26 @@ export class GameScene extends Phaser.Scene {
   setObjective(text, targetObj = null) {
     this.currentObjective = text;
     this.objectiveTarget = targetObj;
-    if (this.objectiveText) {
-      this.objectiveText.setText(text);
-    }
   }
 
   updateObjectiveMarker() {
     if (!this.objectiveMarker || !this.objectiveDistanceText) return;
+    
+    // Auto-set objective target based on quest state
+    if (this.stats.phase === 'quest') {
+      const chapter = CHAPTER_QUESTS[this.questState.currentChapter - 1];
+      if (chapter) {
+        if (this.questState.mainQuestReady) {
+          this.objectiveTarget = chapter.mainQuest.triggerNpc;
+        } else {
+          const activeQuest = chapter.subQuests[this.questState.subQuestProgress];
+          if (activeQuest) {
+            this.objectiveTarget = activeQuest.npc;
+          }
+        }
+      }
+    }
+    
     if (!this.objectiveTarget) {
       this.objectiveMarker.setVisible(false);
       this.objectiveDistanceText.setVisible(false);
@@ -1806,7 +2104,7 @@ export class GameScene extends Phaser.Scene {
     let targetX = 0; let targetY = 0;
     if (typeof this.objectiveTarget === 'string') {
       const npc = this.npcs.find(n => n.npcData.id === this.objectiveTarget);
-      if (!npc) {
+      if (!npc || !npc.visible) {
         this.objectiveMarker.setVisible(false);
         this.objectiveDistanceText.setVisible(false);
         return;
@@ -1830,7 +2128,6 @@ export class GameScene extends Phaser.Scene {
     
     let markerX = cw / 2 + Math.cos(angle) * (cw/2 - margin);
     let markerY = ch / 2 + Math.sin(angle) * (ch/2 - margin);
-
     markerX = Phaser.Math.Clamp(markerX, margin, cw - margin);
     markerY = Phaser.Math.Clamp(markerY, margin, ch - margin);
 
@@ -1843,7 +2140,7 @@ export class GameScene extends Phaser.Scene {
     this.objectiveDistanceText.setVisible(true);
   }
 
-  showDialog(title, body) {
+  showDialog(title, body, duration, avatarKey) {
     if (this.dialogTypewriter) {
       this.dialogTypewriter.remove(false);
     }
@@ -1851,15 +2148,32 @@ export class GameScene extends Phaser.Scene {
     this.dialogReadyToClose = false;
     this.dialogSkipped = false;
     this.dialogBody = body;
+    this.dialogResponsesVisible = false;
     
-    const targets = [this.dialogPanel, this.dialogTitle, this.dialogText].filter(Boolean);
+    const targets = [this.dialogPanel, this.dialogTitle, this.dialogText, this.dialogPortrait, this.dialogPortraitFrame].filter(Boolean);
+    
+    // Draw panel
     this.dialogPanel.clear();
-    this.dialogPanel.fillStyle(0x20323a, 0.88);
-    this.dialogPanel.fillRoundedRect(278, 490, 424, 110, 6);
-    this.dialogPanel.lineStyle(2, 0xe2c36f, 0.82);
-    this.dialogPanel.strokeRoundedRect(278, 490, 424, 110, 6);
+    this.dialogPanel.fillStyle(0x1a2a32, 0.92);
+    this.dialogPanel.fillRoundedRect(70, 420, 720, 155, 8);
+    this.dialogPanel.lineStyle(2, 0xe2c36f, 0.85);
+    this.dialogPanel.strokeRoundedRect(70, 420, 720, 155, 8);
+    
+    // Draw portrait frame
+    this.dialogPortraitFrame.clear();
+    this.dialogPortraitFrame.fillStyle(0x2a1e1a, 0.95);
+    this.dialogPortraitFrame.fillRoundedRect(85, 440, 80, 80, 6);
+    this.dialogPortraitFrame.lineStyle(2, 0xffd700, 0.9);
+    this.dialogPortraitFrame.strokeRoundedRect(85, 440, 80, 80, 6);
+    
+    // Set portrait
+    if (avatarKey && this.textures.exists(avatarKey)) {
+      this.dialogPortrait.setTexture(avatarKey).setPosition(125, 480).setScale(1.1);
+    }
+    
     this.dialogTitle.setText(title);
     this.dialogText.setText('');
+    this.hideDialogResponses();
 
     this.tweens.killTweensOf(targets);
     targets.forEach((target) => target.setVisible(true).setAlpha(0));
@@ -1872,7 +2186,7 @@ export class GameScene extends Phaser.Scene {
     
     let charIndex = 0;
     this.dialogTypewriter = this.time.addEvent({
-      delay: 35,
+      delay: 30,
       repeat: body.length - 1,
       callback: () => {
         if (this.dialogSkipped) return;
@@ -1881,6 +2195,14 @@ export class GameScene extends Phaser.Scene {
         charIndex++;
         if (charIndex >= body.length) {
           this.dialogReadyToClose = true;
+          // If this is a standalone dialog (no chain), show continue after typewriter
+          if (!this.dialogChain) {
+            this.time.delayedCall(duration || 4000, () => {
+              if (this.isDialogActive && !this.dialogChain) this.closeDialog();
+            });
+          } else {
+            this.showDialogActions();
+          }
         }
       }
     });
@@ -1888,7 +2210,11 @@ export class GameScene extends Phaser.Scene {
 
   closeDialog() {
     this.isDialogActive = false;
-    const targets = [this.dialogPanel, this.dialogTitle, this.dialogText].filter(Boolean);
+    this.dialogChain = null;
+    this.dialogOnComplete = null;
+    this.dialogResponsesVisible = false;
+    const targets = [this.dialogPanel, this.dialogTitle, this.dialogText, this.dialogPortrait, this.dialogPortraitFrame,
+      this.dialogResponse1Bg, this.dialogResponse1Text, this.dialogResponse2Bg, this.dialogResponse2Text, this.dialogContinue].filter(Boolean);
     this.tweens.add({
       targets,
       alpha: 0,
@@ -1905,19 +2231,16 @@ export class GameScene extends Phaser.Scene {
     this.hudPanel.lineStyle(2, 0xb4885e, 0.9);
     this.hudPanel.strokeRoundedRect(16, 156, 310, 160, 6);
 
-    this.objectivePanel.clear();
-    this.objectivePanel.fillStyle(0xf1dfad, 0.92);
-    this.objectivePanel.fillRoundedRect(740, 24, 196, 132, 6);
-    this.objectivePanel.lineStyle(3, 0x6b4b31, 0.82);
-    this.objectivePanel.strokeRoundedRect(740, 24, 196, 132, 6);
-    
-    this.objectiveText.setText(this.currentObjective || '');
+    this.questPanel.clear();
+    this.questPanel.fillStyle(0xf1dfad, 0.92);
+    this.questPanel.fillRoundedRect(740, 20, 210, 145, 6);
+    this.questPanel.lineStyle(3, 0x6b4b31, 0.82);
+    this.questPanel.strokeRoundedRect(740, 20, 210, 145, 6);
 
     const remaining = this.totalEnemyCount();
     const phaseLabel = this.getPhaseLabel();
-    const currentWave = WAVE_CONFIGS[this.stats.wave - 1];
-    const chapterText = currentWave?.chapter ? `BAB ${currentWave.chapter} - ` : '';
-    this.waveText.setText(`${chapterText}${phaseLabel}   MUSUH ${remaining}`);
+    const currentChapter = this.questState.currentChapter;
+    this.waveText.setText(`BAB ${currentChapter} - ${phaseLabel}   MUSUH ${remaining}`);
     
     this.goldText.setText(`${this.stats.gold}`);
     this.woodText.setText(`${this.stats.wood}`);
@@ -1986,6 +2309,9 @@ export class GameScene extends Phaser.Scene {
   }
 
   getPhaseLabel() {
+    if (this.stats.phase === 'quest') {
+      return 'MISI';
+    }
     if (this.stats.phase === 'intro') {
       return 'PERKENALAN';
     }
@@ -2498,5 +2824,162 @@ export class GameScene extends Phaser.Scene {
 
   tileKey(tileX, tileY) {
     return `${tileX},${tileY}`;
+  }
+
+  // === QUEST SYSTEM METHODS ===
+
+  playDialogChain(chain, onComplete) {
+    this.dialogChain = chain;
+    this.dialogChainIndex = 0;
+    this.dialogOnComplete = onComplete || null;
+    this.showChainStep(0);
+  }
+
+  showChainStep(index) {
+    if (!this.dialogChain || index >= this.dialogChain.length) {
+      // Chain finished
+      this.closeDialog();
+      if (this.dialogOnComplete) {
+        const cb = this.dialogOnComplete;
+        this.dialogOnComplete = null;
+        cb();
+      }
+      return;
+    }
+    const step = this.dialogChain[index];
+    this.dialogChainIndex = index;
+    
+    // Find NPC data for avatar
+    const npcData = NPCS.find(n => n.id === step.speaker);
+    const avatarKey = npcData ? npcData.avatar : 'avatar-01';
+    const speakerName = npcData ? npcData.name : step.speaker;
+    
+    // Store responses for this step
+    this.currentDialogResponses = step.responses || null;
+    
+    this.showDialog(speakerName, step.text, null, avatarKey);
+  }
+
+  advanceDialogChain() {
+    if (this.dialogChain) {
+      this.showChainStep(this.dialogChainIndex + 1);
+    } else {
+      this.closeDialog();
+    }
+  }
+
+  showDialogActions() {
+    if (!this.dialogChain) return;
+    const step = this.dialogChain[this.dialogChainIndex];
+    if (step && step.responses && step.responses.length >= 2) {
+      // Show response buttons
+      this.dialogResponsesVisible = true;
+      this.dialogResponse1Text.setText(step.responses[0]);
+      this.dialogResponse2Text.setText(step.responses[1]);
+      [this.dialogResponse1Bg, this.dialogResponse1Text, this.dialogResponse2Bg, this.dialogResponse2Text].forEach(el => {
+        el.setVisible(true).setAlpha(1);
+      });
+      this.dialogContinue.setVisible(false);
+    } else {
+      // Show continue button
+      this.dialogResponsesVisible = false;
+      this.dialogContinue.setVisible(true).setAlpha(1);
+    }
+  }
+
+  handleDialogResponse(responseIndex) {
+    this.sfx.click();
+    this.hideDialogResponses();
+    this.dialogResponsesVisible = false;
+    // Advance to next step in chain
+    this.advanceDialogChain();
+  }
+
+  hideDialogResponses() {
+    [this.dialogResponse1Bg, this.dialogResponse1Text, this.dialogResponse2Bg, this.dialogResponse2Text, this.dialogContinue].forEach(el => {
+      if (el) el.setVisible(false).setAlpha(0);
+    });
+    this.dialogResponsesVisible = false;
+  }
+
+  completeSubQuest() {
+    const chapter = CHAPTER_QUESTS[this.questState.currentChapter - 1];
+    if (!chapter) return;
+    
+    const completedQuest = chapter.subQuests[this.questState.subQuestProgress];
+    this.questState.subQuestProgress += 1;
+    
+    // Show completion floating text
+    this.spawnFloatingText(this.player.x, this.player.y - 70, `✓ ${completedQuest.title}`, '#ffd700');
+    
+    // Check if all sub-quests are done
+    if (this.questState.subQuestProgress >= chapter.subQuests.length) {
+      this.questState.mainQuestReady = true;
+      this.spawnFloatingText(this.player.x, this.player.y - 90, '⚔ MISI UTAMA TERBUKA!', '#ff8800');
+    }
+    
+    this.updateQuestTracker();
+    this.updateQuestMarkers();
+  }
+
+  updateQuestTracker() {
+    const chapter = CHAPTER_QUESTS[this.questState.currentChapter - 1];
+    if (!chapter) return;
+    
+    this.questChapterText.setText(chapter.title);
+    
+    const lockIcon = this.questState.mainQuestReady ? '⚔' : '🔒';
+    this.questMainText.setText(`${lockIcon} ${chapter.mainQuest.title}`);
+    this.questMainText.setColor(this.questState.mainQuestReady ? '#2d6a1e' : '#8b4513');
+    
+    // Sub-quest list
+    for (let i = 0; i < 3; i++) {
+      if (i < chapter.subQuests.length) {
+        const sq = chapter.subQuests[i];
+        const done = i < this.questState.subQuestProgress;
+        const active = i === this.questState.subQuestProgress && !this.questState.mainQuestReady;
+        const icon = done ? '☑' : (active ? '▸' : '☐');
+        this.questSubTexts[i].setText(`${icon} ${sq.title}`);
+        this.questSubTexts[i].setColor(done ? '#4a7c59' : (active ? '#1a5276' : '#888888'));
+        this.questSubTexts[i].setVisible(true);
+      } else {
+        this.questSubTexts[i].setVisible(false);
+      }
+    }
+    
+    // Navigation hint
+    if (this.questState.mainQuestReady) {
+      const triggerNpc = NPCS.find(n => n.id === chapter.mainQuest.triggerNpc);
+      this.questNavText.setText(`📍 ${triggerNpc ? triggerNpc.name : 'Tetua Desa'}`);
+    } else {
+      const activeQuest = chapter.subQuests[this.questState.subQuestProgress];
+      this.questNavText.setText(activeQuest ? `📍 ${activeQuest.hint}` : '');
+    }
+  }
+
+  updateQuestMarkers() {
+    const chapter = CHAPTER_QUESTS[this.questState.currentChapter - 1];
+    
+    this.npcs.forEach((npc) => {
+      // Hide all markers first
+      npc.questMarker.setVisible(false);
+      
+      if (this.stats.phase !== 'quest' || !chapter) return;
+      
+      if (this.questState.mainQuestReady) {
+        // Show marker on main quest trigger NPC
+        if (npc.npcData.id === chapter.mainQuest.triggerNpc) {
+          npc.questMarker.setVisible(true);
+          npc.questMarker.setText('⚔');
+        }
+      } else {
+        // Show marker on active sub-quest NPC
+        const activeQuest = chapter.subQuests[this.questState.subQuestProgress];
+        if (activeQuest && npc.npcData.id === activeQuest.npc) {
+          npc.questMarker.setVisible(true);
+          npc.questMarker.setText('!');
+        }
+      }
+    });
   }
 }

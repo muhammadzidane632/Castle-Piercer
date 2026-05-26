@@ -98,6 +98,13 @@ export const IMAGE_ASSETS = [
   { key: 'ui-wood-slots', path: path('assets/UI Elements/UI Elements/Wood Table/WoodTable_Slots.png') },
   { key: 'ui-swords', path: path('assets/UI Elements/UI Elements/Swords/Swords.png') },
   { key: 'avatar-01', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_01.png') },
+  { key: 'avatar-02', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_02.png') },
+  { key: 'avatar-03', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_03.png') },
+  { key: 'avatar-04', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_04.png') },
+  { key: 'avatar-06', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_06.png') },
+  { key: 'avatar-08', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_08.png') },
+  { key: 'avatar-09', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_09.png') },
+  { key: 'avatar-14', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_14.png') },
   { key: 'avatar-18', path: path('assets/UI Elements/UI Elements/Human Avatars/Avatars_18.png') },
   ...iconAssets,
 ];
