@@ -276,9 +276,10 @@ const CHAPTER_QUESTS = [
     chapter: 4, title: 'Bab 4: Serangan Dua Arah',
     subQuests: [
       { id: 'ch4_s1', npc: 'villager', title: 'Tenangkan Warga Desa', hint: 'Warga Desa — Desa',
+        action: { type: 'ambush', count: 2, kind: 'raider', hint: 'Kalahkan penyusup yang muncul!' },
         dialog: [
           { speaker: 'villager', text: 'Ksatria! Ibu-ibu menangis, anak-anak ketakutan... Katanya musuh serang dari dua arah!', responses: ['Tenanglah, aku lindungi kalian.', 'Dari mana kau dengar itu?'] },
-          { speaker: 'villager', text: 'Terima kasih, Ksatria... Pedagang di timur bilang dia lihat pasukan dari barat dan selatan. Oh, Tabib juga butuh bantuanmu!' },
+          { speaker: 'villager', text: 'Tunggu, apa itu di belakangmu?! Awas Ksatria, ada penyusup!' },
         ] },
       { id: 'ch4_s2', npc: 'healer', title: 'Perbekalan dari Tabib', hint: 'Tabib — Area Selatan',
         dialog: [
@@ -301,9 +302,10 @@ const CHAPTER_QUESTS = [
           { speaker: 'elder', text: 'Aku tidak yakin siapa... Tanya Pengintai di menara — dia mungkin lihat sesuatu yang mencurigakan.' },
         ] },
       { id: 'ch5_s2', npc: 'scout', title: 'Interogasi Pengintai', hint: 'Pengintai — Menara Tengah',
+        action: { type: 'search_clue', targetX: 28, targetY: 7, hint: 'Cari petunjuk di area timur' },
         dialog: [
-          { speaker: 'scout', text: 'Mata-mata? Hmm... Beberapa malam lalu aku lihat bayangan mencurigakan di dekat selatan. Tapi aku tidak yakin siapa.', responses: ['Bisa kau tunjukkan lokasinya?', 'Kita harus lebih waspada.'] },
-          { speaker: 'scout', text: 'Dekat area pedagang timur. Tapi hati-hati — kalau memang ada mata-mata, dia pasti sudah tahu kita curiga. Cek Pedagang di timur!' },
+          { speaker: 'scout', text: 'Mata-mata? Hmm... Beberapa malam lalu aku lihat bayangan mencurigakan di dekat selatan.', responses: ['Bisa kau tunjukkan lokasinya?', 'Kita harus lebih waspada.'] },
+          { speaker: 'scout', text: 'Dekat area pedagang timur. Coba periksa ke sana dulu, mungkin ada barang yang tertinggal!' },
         ] },
       { id: 'ch5_s3', npc: 'merchant', title: 'Cek Pedagang di timur', hint: 'Pedagang — Area Timur',
         dialog: [
@@ -341,9 +343,10 @@ const CHAPTER_QUESTS = [
     chapter: 7, title: 'Bab 7: Serangan Balik!',
     subQuests: [
       { id: 'ch7_s1', npc: 'aran', title: 'Temui Aran di selatan', hint: 'Aran — Area Selatan',
+        action: { type: 'ambush', count: 3, kind: 'grunt', hint: 'Bertahanlah dari sergapan musuh!' },
         dialog: [
           { speaker: 'aran', text: 'Ksatria... Ini aku, Aran. Maafkan aku. Akulah yang membocorkan posisi kita ke musuh. Keluargaku disandera mereka.', responses: ['Kau... pengkhianat?!', 'Kenapa kau lakukan ini?'] },
-          { speaker: 'aran', text: 'Aku tahu kau marah. Tapi sekarang aku ingin menebus dosaku. Biar kutunjukkan jalan ke markas mereka. Bicarakan ini dengan Tetua Desa.' },
+          { speaker: 'aran', text: 'Aku tahu kau marah. Tapi AWAS! Pasukan merah menyusulku ke sini! Bertahanlah!' },
         ] },
       { id: 'ch7_s2', npc: 'elder', title: 'Rencana serangan balik', hint: 'Tetua Desa — Desa',
         dialog: [
@@ -366,9 +369,10 @@ const CHAPTER_QUESTS = [
     chapter: 8, title: 'Bab 8: Menembus Garis Pertahanan',
     subQuests: [
       { id: 'ch8_s1', npc: 'aran', title: 'Aran tunjukkan jalan', hint: 'Aran — Area Selatan',
+        action: { type: 'mini_boss', kind: 'brute', hint: 'Kalahkan komandan penjaga!' },
         dialog: [
-          { speaker: 'aran', text: 'Lewat sini, Ksatria! Aku tahu titik lemah pertahanan mereka. Mereka simpan pasukan terkuat di kastil merah.', responses: ['Tunjukkan jalannya!', 'Bagaimana kalau ini jebakan?'] },
-          { speaker: 'aran', text: 'Aku bersumpah dengan nyawaku — ini bukan jebakan. Aku sudah kehilangan segalanya karena mereka. Cepat, sebelum mereka sadar!' },
+          { speaker: 'aran', text: 'Lewat sini, Ksatria! Aku tahu titik lemah pertahanan mereka.', responses: ['Tunjukkan jalannya!', 'Bagaimana kalau ini jebakan?'] },
+          { speaker: 'aran', text: 'Aku bersumpah ini bukan jebakan! Sial, komandan mereka memblokir jalan! Kalahkan dia dulu!' },
         ] },
       { id: 'ch8_s2', npc: 'captain', title: 'Koordinasi dengan Kapten', hint: 'Kapten Jaga — Kastil',
         dialog: [
@@ -406,13 +410,14 @@ const CHAPTER_QUESTS = [
     chapter: 10, title: 'Bab 10: Pertempuran Terakhir',
     subQuests: [
       { id: 'ch10_s1', npc: 'aran', title: 'Rencana serangan Aran', hint: 'Aran — Area Selatan',
+        action: { type: 'ignite_torch', count: 2, hint: 'Nyalakan 2 obor perang' },
         dialog: [
           { speaker: 'aran', text: 'Dua Tombak Hitam menjaga kastil merah. Ini rencana terakhirku — aku alihkan perhatian yang satu, kau hadapi yang lain.', responses: ['Kau yakin bisa?', 'Hati-hati, Aran.'] },
-          { speaker: 'aran', text: 'Ini penebusan dosaku, Ksatria. Apapun yang terjadi... jangan biarkan pengorbananku sia-sia. Bicara Kapten untuk atur formasi.' },
+          { speaker: 'aran', text: 'Ini penebusan dosaku. Sebelum kita mulai, nyalakan dua obor perang sebagai sinyal untuk Kapten!' },
         ] },
       { id: 'ch10_s2', npc: 'captain', title: 'Atur formasi terakhir', hint: 'Kapten Jaga — Kastil',
         dialog: [
-          { speaker: 'captain', text: 'Formasi terakhir sudah kuatur. Semua penjaga akan maju bersamamu. Ini pertempuran terakhir kita, Ksatria.', responses: ['Kita selesaikan ini bersama!', 'Untuk kerajaan kita!'] },
+          { speaker: 'captain', text: 'Sinyal obor terlihat! Formasi terakhir sudah kuatur. Semua penjaga akan maju bersamamu.', responses: ['Kita selesaikan ini bersama!', 'Untuk kerajaan kita!'] },
           { speaker: 'captain', text: 'Untuk kerajaan! Temui Tetua Desa untuk pesan terakhir sebelum kita maju.' },
         ] },
       { id: 'ch10_s3', npc: 'elder', title: 'Pesan terakhir Tetua', hint: 'Tetua Desa — Desa',
@@ -1022,7 +1027,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   setupPhysics() {
-    this.redBaseBarrier = this.add.rectangle(22 * 64, 18 * 64, 640, 640, 0x000000, 0).setOrigin(0.5);
+    this.redBaseBarrier = this.add.rectangle(24 * 64, 18 * 64, 384, 512, 0x000000, 0).setOrigin(0.5);
     this.physics.add.existing(this.redBaseBarrier, true);
     this.physics.add.collider(
       this.player, 
@@ -1084,10 +1089,89 @@ export class GameScene extends Phaser.Scene {
     this.updateGuards(time);
     this.updateProjectiles(delta);
     this.updateWaveState(time);
+    this.updateQuestAction(time);
     this.updateInteractionHint();
     this.updateDepths();
     this.updateObjectiveMarker();
     this.updateUi();
+  }
+
+  updateQuestAction(time) {
+    if (!this.activeQuestAction) return;
+    
+    if (this.activeQuestAction.type === 'ambush' || this.activeQuestAction.type === 'mini_boss') {
+      let aliveCount = 0;
+      if (this.questEnemies) {
+        this.questEnemies.children.iterate((enemy) => {
+          if (enemy && enemy.active) aliveCount++;
+        });
+      }
+      if (aliveCount === 0) {
+        this.finishQuestAction();
+      }
+    } else if (this.activeQuestAction.type === 'search_clue') {
+      if (this.clueZone && Phaser.Geom.Intersects.RectangleToRectangle(this.player.getBounds(), this.clueZone.getBounds())) {
+        this.spawnFloatingText(this.player.x, this.player.y - 50, "Petunjuk ditemukan!", "#ffff00");
+        this.sfx.collect();
+        this.clueZone.destroy();
+        this.finishQuestAction();
+      }
+    }
+  }
+
+  finishQuestAction() {
+    this.activeQuestAction = null;
+    this.showDialog('Sistem', 'Aksi misi berhasil diselesaikan!', 3000);
+    this.time.delayedCall(1500, () => {
+      this.completeSubQuest();
+    });
+  }
+
+  spawnQuestEnemy(kind, x, y) {
+    const enemy = this.spawnEnemy(kind, 'enemy_spawn_south', { waveEnemy: false });
+    if (enemy) {
+      enemy.setPosition(x, y);
+      enemy.ai.lastSafePosition.set(x, y);
+      enemy.ai.questEnemy = true;
+      if (!this.questEnemies) this.questEnemies = this.physics.add.group();
+      this.questEnemies.add(enemy);
+    }
+  }
+
+  startQuestAction(action, subQuest) {
+    this.activeQuestAction = action;
+    this.activeSubQuestToComplete = subQuest;
+    
+    if (action.type === 'ambush' || action.type === 'mini_boss') {
+      this.questEnemies = this.physics.add.group();
+      const count = action.count || 1;
+      for (let i = 0; i < count; i++) {
+        const offset = [Phaser.Math.Between(-2, 2), Phaser.Math.Between(2, 4)];
+        const tileX = this.worldToTile(this.player.x).x + offset[0];
+        const tileY = this.worldToTile(this.player.y).y + offset[1];
+        const pos = this.findSafeWorld(tileX, tileY, 10);
+        this.spawnQuestEnemy(action.kind, pos.x, pos.y);
+      }
+      this.setObjective(action.hint, null);
+    } else if (action.type === 'search_clue') {
+      this.clueZone = this.add.zone(action.targetX * 64, action.targetY * 64, 128, 128);
+      this.physics.add.existing(this.clueZone);
+      this.setObjective(action.hint, { x: action.targetX * 64, y: action.targetY * 64 });
+    } else if (action.type === 'ignite_torch') {
+      this.questTorches = [
+        this.spawnQuestTorch(20, 15),
+        this.spawnQuestTorch(26, 15)
+      ];
+      this.setObjective(action.hint, this.questTorches[0]);
+    }
+  }
+
+  spawnQuestTorch(tx, ty) {
+    const pos = this.findSafeWorld(tx, ty, 5);
+    const torch = this.physics.add.staticSprite(pos.x, pos.y, 'fire').setScale(0.8).setDepth(pos.y).setTint(0x555555);
+    torch.body.setSize(32, 32);
+    torch.ignited = false;
+    return torch;
   }
 
   updatePlayer(time) {
@@ -1400,7 +1484,11 @@ export class GameScene extends Phaser.Scene {
         }
         // Play sub-quest dialog chain
         this.playDialogChain(activeSubQuest.dialog, () => {
-          this.completeSubQuest();
+          if (activeSubQuest.action) {
+            this.startQuestAction(activeSubQuest.action, activeSubQuest);
+          } else {
+            this.completeSubQuest();
+          }
         });
         return;
       }
@@ -1416,6 +1504,27 @@ export class GameScene extends Phaser.Scene {
       // Main quest NPC but sub-quests not done
       if (chapter.mainQuest.triggerNpc === data.id && !this.questState.mainQuestReady) {
         this.showDialog(data.name, 'Persiapanmu belum selesai, Ksatria. Selesaikan semua misi kecil dulu sebelum kita mulai pertempuran.', 4000, data.avatar);
+        return;
+      }
+    }
+    
+    // Check torches
+    if (this.activeQuestAction && this.activeQuestAction.type === 'ignite_torch') {
+      let interactedTorch = false;
+      this.questTorches.forEach(t => {
+        if (!t.ignited && Phaser.Math.Distance.Between(this.player.x, this.player.y, t.x, t.y) < 60) {
+          t.ignited = true;
+          t.clearTint();
+          t.play('fire-burn');
+          this.sfx.hit();
+          this.spawnFloatingText(t.x, t.y - 30, "Menyala!", "#ff8800");
+          interactedTorch = true;
+        }
+      });
+      if (interactedTorch) {
+        if (this.questTorches.every(t => t.ignited)) {
+          this.finishQuestAction();
+        }
         return;
       }
     }
@@ -2250,7 +2359,7 @@ export class GameScene extends Phaser.Scene {
 
     this.drawBar(this.playerHpBar, 26, 218, 135, 14, this.stats.playerHp, this.stats.playerMaxHp, 0xd94f4f, 'HP');
     this.drawBar(this.castleHpBar, 176, 218, 135, 14, this.stats.castleHp, this.stats.castleMaxHp, 0x64b5f6, 'KASTIL');
-    if (this.counterUnlocked || this.stats.wave >= 10 || this.stats.phase === 'final' || this.stats.phase === 'counter') {
+    if (this.questState.currentChapter === 10 || this.stats.wave >= 10 || this.stats.phase === 'final' || this.stats.phase === 'counter') {
       this.drawBar(this.baseHpBar, 756, 126, 158, 12, this.stats.baseHp, this.stats.baseMaxHp, 0xff675f, 'MARKAS');
     } else {
       this.baseHpBar.clear();
