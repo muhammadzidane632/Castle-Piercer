@@ -16,15 +16,19 @@ export class EndScene extends Phaser.Scene {
     const won = this.result === 'win';
     const sfx = this.registry.get('sfx');
 
+    if (sfx) {
+      // Keep playing the BGM!
+    }
+
     this.add.rectangle(0, 0, width, height, won ? 0x356f65 : 0x331f2a).setOrigin(0);
     this.add.image(180, 520, 'cloud-1').setScale(1.5).setAlpha(0.78);
     this.add.image(790, 132, 'cloud-2').setScale(1.1).setAlpha(0.7);
 
     const titlePanel = this.add.graphics();
     titlePanel.fillStyle(won ? 0xf1dfad : 0xdccaa0, 0.94);
-    titlePanel.fillRoundedRect(width / 2 - 255, 42, 510, 138, 8);
+    titlePanel.fillRoundedRect(width / 2 - 300, 42, 600, 138, 8);
     titlePanel.lineStyle(4, won ? 0x4f6b3a : 0x6b4b31, 0.84);
-    titlePanel.strokeRoundedRect(width / 2 - 255, 42, 510, 138, 8);
+    titlePanel.strokeRoundedRect(width / 2 - 300, 42, 600, 138, 8);
 
     this.add.text(width / 2, 92, won ? 'BASECAMP HANCUR' : 'KERAJAAN RUNTUH', {
       fontFamily: 'Georgia, serif',

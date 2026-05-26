@@ -41,6 +41,8 @@ export class PreloadScene extends Phaser.Scene {
       this.load.image(asset.key, assetUrl(asset.path));
     });
 
+    this.load.audio('bgm-hope', assetUrl('assets/BGM/hope.mp3'));
+
     SPRITESHEET_ASSETS.forEach((asset) => {
       this.load.spritesheet(asset.key, assetUrl(asset.path), {
         frameWidth: asset.frameWidth,

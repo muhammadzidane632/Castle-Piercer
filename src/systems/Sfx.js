@@ -26,6 +26,24 @@ export class Sfx {
     }
   }
 
+  startMusic(scene) {
+    this.ensure();
+    if (!this.context || !this.enabled || !scene) return;
+    
+    if (!this.bgm) {
+      this.bgm = scene.sound.add('bgm-hope', { loop: true, volume: 0.5 });
+      this.bgm.play();
+    } else if (!this.bgm.isPlaying) {
+      this.bgm.play();
+    }
+  }
+
+  stopMusic() {
+    if (this.bgm && this.bgm.isPlaying) {
+      this.bgm.stop();
+    }
+  }
+
   playTone({ frequency = 440, duration = 0.12, type = 'square', gain = 0.035, slide = 0 }) {
     this.ensure();
     if (!this.context || !this.enabled) {

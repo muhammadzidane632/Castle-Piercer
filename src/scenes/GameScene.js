@@ -94,34 +94,34 @@ const WAVE_CONFIGS = [
     units: [{ kind: 'grunt', count: 6, spawn: 'enemy_spawn_bottom_left' }, { kind: 'archer', count: 6, spawn: 'enemy_spawn_bottom_right' }],
   },
   {
-    chapter: 7, chapterTitle: 'Chapter 7: The Heavy Siege', title: 'Wave 7 - Brute Force',
-    dialog: 'They are sending all their heavy brutes from the center. Defend the castle!',
-    units: [{ kind: 'brute', count: 8, spawn: 'enemy_spawn_south' }, { kind: 'archer', count: 4, spawn: 'enemy_spawn_east' }],
+    chapter: 7, chapterTitle: 'Chapter 7: Counter Attack', title: 'Wave 7 - Pushing Forward',
+    dialog: 'The Red faction is falling back! Lead our forces, cross the bridge and attack their base!',
+    units: [{ kind: 'brute', count: 8, spawn: 'enemy_base_core' }, { kind: 'archer', count: 4, spawn: 'boss_spawn' }],
   },
   {
-    chapter: 8, chapterTitle: 'Chapter 8: Total War', title: 'Wave 8 - 5 Directions',
-    dialog: 'They are everywhere! Use your Ultimate Skills to survive this!',
+    chapter: 8, chapterTitle: 'Chapter 8: Breaking the Line', title: 'Wave 8 - Base Defenders',
+    dialog: 'They are trying to defend the Red Castle! Break through their defenses!',
     units: [
-      { kind: 'brute', count: 3, spawn: 'enemy_spawn_west' }, { kind: 'archer', count: 4, spawn: 'enemy_spawn_south' },
-      { kind: 'raider', count: 4, spawn: 'enemy_spawn_east' }, { kind: 'grunt', count: 4, spawn: 'enemy_spawn_far_left' },
-      { kind: 'grunt', count: 4, spawn: 'enemy_spawn_far_right' }
+      { kind: 'brute', count: 3, spawn: 'enemy_base_core' }, { kind: 'archer', count: 4, spawn: 'boss_spawn' },
+      { kind: 'raider', count: 4, spawn: 'enemy_base_core' }, { kind: 'grunt', count: 4, spawn: 'boss_spawn' },
+      { kind: 'grunt', count: 4, spawn: 'enemy_base_core' }
     ],
   },
   {
-    chapter: 9, chapterTitle: 'Chapter 9: The Red Banner', title: 'Wave 9 - Maximum Assault',
-    dialog: 'The entire red army is mobilized! Hold the line, hero!',
+    chapter: 9, chapterTitle: 'Chapter 9: The Red Banner', title: 'Wave 9 - Last Stand',
+    dialog: 'They are making a last stand at the Red Castle base! Keep pushing!',
     units: [
-      { kind: 'brute', count: 5, spawn: 'enemy_spawn_west' }, { kind: 'archer', count: 5, spawn: 'enemy_spawn_south' },
-      { kind: 'raider', count: 5, spawn: 'enemy_spawn_east' }, { kind: 'brute', count: 3, spawn: 'enemy_spawn_bottom_left' },
-      { kind: 'archer', count: 3, spawn: 'enemy_spawn_bottom_right' }
+      { kind: 'brute', count: 5, spawn: 'enemy_base_core' }, { kind: 'archer', count: 5, spawn: 'boss_spawn' },
+      { kind: 'raider', count: 5, spawn: 'enemy_base_core' }, { kind: 'brute', count: 3, spawn: 'boss_spawn' },
+      { kind: 'archer', count: 3, spawn: 'enemy_base_core' }
     ],
   },
   {
     chapter: 10, chapterTitle: 'Chapter 10: The Grand Finale', title: 'Wave 10 - Twin Lancers',
-    dialog: 'Two Black Lancers have emerged! Defeat them and end this war!',
+    dialog: 'Two Black Lancers are guarding the Red Castle! Defeat them and end this war!',
     units: [
-      { kind: 'boss', count: 1, spawn: 'enemy_spawn_east' }, { kind: 'boss', count: 1, spawn: 'enemy_spawn_west' },
-      { kind: 'brute', count: 6, spawn: 'enemy_spawn_south' }
+      { kind: 'boss', count: 1, spawn: 'enemy_base_core' }, { kind: 'boss', count: 1, spawn: 'boss_spawn' },
+      { kind: 'brute', count: 6, spawn: 'enemy_base_core' }
     ],
   },
 ];
@@ -169,11 +169,11 @@ const ENEMY_DEFS = {
   },
   boss: {
     texture: 'black-lancer-idle',
-    hp: 16,
+    hp: 45,
     speed: 70,
     scale: 0.44,
     body: [72, 48, 124, 244],
-    damage: 2,
+    damage: 4,
     rewardGold: 14,
     rewardWood: 5,
   },
@@ -236,6 +236,7 @@ export class GameScene extends Phaser.Scene {
     createGameAnimations(this);
     this.sfx = this.registry.get('sfx') || new Sfx();
     this.registry.set('sfx', this.sfx);
+    this.sfx.startMusic(this);
 
     this.stats = {
       phase: 'intro',
@@ -748,7 +749,7 @@ export class GameScene extends Phaser.Scene {
   }
 
   setupPhysics() {
-    this.redBaseBarrier = this.add.rectangle(18 * 64, 17.5 * 64, 4000, 640, 0x000000, 0).setOrigin(0.5);
+    this.redBaseBarrier = this.add.rectangle(22 * 64, 18 * 64, 640, 640, 0x000000, 0).setOrigin(0.5);
     this.physics.add.existing(this.redBaseBarrier, true);
     this.physics.add.collider(
       this.player, 
@@ -971,9 +972,11 @@ export class GameScene extends Phaser.Scene {
     if (playerDistance < (enemy.ai.kind === 'boss' ? 280 : 190)) {
       return this.player;
     }
-    if (this.stats.phase === 'defense') {
+    // From wave 7 onwards, they defend their base rather than attacking ours
+    if (this.stats.phase === 'defense' && this.stats.wave < 7) {
       return this.castleAttackPoint;
     }
+    // If wave 7+, they stay near their base or target the player
     return this.player;
   }
 
@@ -1002,9 +1005,15 @@ export class GameScene extends Phaser.Scene {
           this.moveActorToward(guard, target, 116, time, false);
         }
       } else {
-        const homeDistance = Phaser.Math.Distance.Between(guard.x, guard.y, guard.ai.home.x, guard.ai.home.y);
-        if (homeDistance > 18) {
-          this.moveActorToward(guard, guard.ai.home, 92, time, false);
+        let currentHome = guard.ai.home;
+        if (this.stats.wave >= 7 || ['counter', 'final'].includes(this.stats.phase)) {
+          // Push towards enemy base in counter-attack levels
+          currentHome = this.enemyBasePoint;
+        }
+
+        const homeDistance = Phaser.Math.Distance.Between(guard.x, guard.y, currentHome.x, currentHome.y);
+        if (homeDistance > 32) {
+          this.moveActorToward(guard, currentHome, 92, time, false);
         } else {
           guard.setVelocity(0, 0);
           guard.play('blue-idle', true);
@@ -1132,7 +1141,14 @@ export class GameScene extends Phaser.Scene {
     this.lastWaveEnemyCount = 0;
     this.lastWaveProgressTime = this.time.now;
     this.showDialog(wave.chapterTitle || wave.title, wave.dialog, 4300);
-    this.setObjective(`Survive ${wave.title}. Protect the castle.`, null);
+    
+    if (waveNumber >= 7) {
+      this.setObjective(`Wave ${waveNumber}: Attack the Red Basecamp!`, this.enemyBasePoint);
+      this.enemyCoreGlow.setVisible(true);
+      this.enemyCoreFire.setVisible(true);
+    } else {
+      this.setObjective(`Survive ${wave.title}. Protect the castle.`, null);
+    }
 
     if (this.waveSpawnEvent) {
       this.waveSpawnEvent.remove(false);
@@ -1323,7 +1339,7 @@ export class GameScene extends Phaser.Scene {
       }
     });
 
-    if ((this.stats.phase === 'final' || this.bossDefeated) && this.stats.baseHp > 0) {
+    if ((this.stats.phase === 'final' || this.stats.phase === 'counter' || this.stats.wave >= 10 || this.bossDefeated) && this.stats.baseHp > 0) {
       const coreRect = new Phaser.Geom.Rectangle(this.enemyBasePoint.x - 58, this.enemyBasePoint.y - 58, 116, 116);
       if (Phaser.Geom.Intersects.RectangleToRectangle(attackBox, coreRect)) {
         hitSomething = true;
@@ -1858,7 +1874,7 @@ export class GameScene extends Phaser.Scene {
 
     this.drawBar(this.playerHpBar, 26, 218, 135, 14, this.stats.playerHp, this.stats.playerMaxHp, 0xd94f4f, 'HP');
     this.drawBar(this.castleHpBar, 176, 218, 135, 14, this.stats.castleHp, this.stats.castleMaxHp, 0x64b5f6, 'CASTLE');
-    if (this.counterUnlocked) {
+    if (this.counterUnlocked || this.stats.wave >= 10 || this.stats.phase === 'final' || this.stats.phase === 'counter') {
       this.drawBar(this.baseHpBar, 756, 126, 158, 12, this.stats.baseHp, this.stats.baseMaxHp, 0xff675f, 'BASE');
     } else {
       this.baseHpBar.clear();

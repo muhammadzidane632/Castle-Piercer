@@ -74,12 +74,14 @@ export class StartScene extends Phaser.Scene {
     });
     startButton.on('pointerup', () => {
       sfx.ensure();
+      sfx.startMusic(this);
       this.scene.start('GameScene');
     });
 
     this.input.keyboard.once('keydown', () => {
       sfx.ensure();
       sfx.click();
+      sfx.startMusic(this);
       this.scene.start('GameScene');
     });
 
