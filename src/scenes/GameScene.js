@@ -1145,24 +1145,29 @@ export class GameScene extends Phaser.Scene {
     if (action.type === 'ambush' || action.type === 'mini_boss') {
       this.questEnemies = this.physics.add.group();
       const count = action.count || 1;
+      let lastPos = null;
       for (let i = 0; i < count; i++) {
         const offset = [Phaser.Math.Between(-2, 2), Phaser.Math.Between(2, 4)];
         const tileX = this.worldToTile(this.player.x).x + offset[0];
         const tileY = this.worldToTile(this.player.y).y + offset[1];
         const pos = this.findSafeWorld(tileX, tileY, 10);
         this.spawnQuestEnemy(action.kind, pos.x, pos.y);
+        lastPos = pos;
       }
       this.setObjective(action.hint, null);
+      if (lastPos) this.panCameraTo(lastPos.x, lastPos.y, 800, 1200);
     } else if (action.type === 'search_clue') {
       this.clueZone = this.add.zone(action.targetX * 64, action.targetY * 64, 128, 128);
       this.physics.add.existing(this.clueZone);
       this.setObjective(action.hint, { x: action.targetX * 64, y: action.targetY * 64 });
+      this.panCameraTo(action.targetX * 64, action.targetY * 64, 1000, 1500);
     } else if (action.type === 'ignite_torch') {
       this.questTorches = [
         this.spawnQuestTorch(20, 15),
         this.spawnQuestTorch(26, 15)
       ];
       this.setObjective(action.hint, this.questTorches[0]);
+      this.panCameraTo(this.questTorches[0].x, this.questTorches[0].y, 1000, 1500);
     }
   }
 
@@ -1171,7 +1176,25 @@ export class GameScene extends Phaser.Scene {
     const torch = this.physics.add.staticSprite(pos.x, pos.y, 'fire').setScale(0.8).setDepth(pos.y).setTint(0x555555);
     torch.body.setSize(32, 32);
     torch.ignited = false;
+    
+    // Indikator panah merah
+    const arrow = this.add.text(pos.x, pos.y - 40, '⬇', { fontSize: '32px', color: '#ff0000', stroke: '#000', strokeThickness: 4 })
+      .setOrigin(0.5).setDepth(pos.y + 10);
+    this.tweens.add({ targets: arrow, y: pos.y - 50, yoyo: true, repeat: -1, duration: 500 });
+    torch.indicatorArrow = arrow;
+    
     return torch;
+  }
+
+  panCameraTo(x, y, duration = 1000, hold = 1000) {
+    this.cameras.main.stopFollow();
+    this.cameras.main.pan(x, y, duration, 'Sine.easeInOut');
+    this.time.delayedCall(duration + hold, () => {
+      this.cameras.main.pan(this.player.x, this.player.y, duration, 'Sine.easeInOut');
+      this.time.delayedCall(duration, () => {
+        this.cameras.main.startFollow(this.player, true, 0.11, 0.11);
+      });
+    });
   }
 
   updatePlayer(time) {
@@ -1472,6 +1495,11 @@ export class GameScene extends Phaser.Scene {
       
       // Check if this NPC is the active sub-quest target
       if (activeSubQuest && activeSubQuest.npc === data.id) {
+        if (this.activeQuestAction) {
+          this.showDialog(data.name, 'Selesaikan misimu dulu, Ksatria! (Lihat area tujuan atau musuh di sekitarmu)', 3500, data.avatar);
+          return;
+        }
+        
         // Check resource requirements
         if (activeSubQuest.requireResource) {
           const res = activeSubQuest.requireResource;
@@ -1516,6 +1544,7 @@ export class GameScene extends Phaser.Scene {
           t.ignited = true;
           t.clearTint();
           t.play('fire-burn');
+          if (t.indicatorArrow) t.indicatorArrow.destroy();
           this.sfx.hit();
           this.spawnFloatingText(t.x, t.y - 30, "Menyala!", "#ff8800");
           interactedTorch = true;
@@ -1572,8 +1601,15 @@ export class GameScene extends Phaser.Scene {
       this.setObjective(`Gelombang ${waveNumber}: Serang Markas Merah!`, this.enemyBasePoint);
       this.enemyCoreGlow.setVisible(true);
       this.enemyCoreFire.setVisible(true);
+      this.panCameraTo(this.enemyBasePoint.x, this.enemyBasePoint.y, 1400, 1500);
     } else {
       this.setObjective(`Bertahan ${wave.title}. Lindungi kastil.`, null);
+      const firstEnemy = this.spawnQueue[0];
+      if (firstEnemy) {
+        const baseTile = OBJECT_FALLBACKS[firstEnemy.spawn] || OBJECT_FALLBACKS.enemy_spawn_south;
+        const pos = this.findSafeWorld(baseTile[0], baseTile[1], 20) || this.tileToWorld(baseTile[0], baseTile[1]);
+        this.panCameraTo(pos.x, pos.y, 1400, 1500);
+      }
     }
 
     if (this.waveSpawnEvent) {
@@ -2191,7 +2227,26 @@ export class GameScene extends Phaser.Scene {
     if (!this.objectiveMarker || !this.objectiveDistanceText) return;
     
     // Auto-set objective target based on quest state
-    if (this.stats.phase === 'quest') {
+    if (this.stats.phase === 'defense') {
+      let closest = null;
+      let minDist = Infinity;
+      if (this.enemies) {
+        this.enemies.children.iterate((enemy) => {
+          if (enemy && enemy.active && enemy.ai && enemy.ai.waveEnemy) {
+            const d = Phaser.Math.Distance.Between(this.player.x, this.player.y, enemy.x, enemy.y);
+            if (d < minDist) {
+              minDist = d;
+              closest = enemy;
+            }
+          }
+        });
+      }
+      if (this.stats.wave >= 7) {
+        this.objectiveTarget = closest || this.enemyBasePoint;
+      } else {
+        this.objectiveTarget = closest;
+      }
+    } else if (!this.activeQuestAction && this.stats.phase === 'quest') {
       const chapter = CHAPTER_QUESTS[this.questState.currentChapter - 1];
       if (chapter) {
         if (this.questState.mainQuestReady) {
@@ -2209,6 +2264,13 @@ export class GameScene extends Phaser.Scene {
       this.objectiveMarker.setVisible(false);
       this.objectiveDistanceText.setVisible(false);
       return;
+    }
+    
+    // Set arrow color based on target type
+    if (this.stats.phase === 'defense' && this.objectiveTarget !== this.enemyBasePoint) {
+      this.objectiveMarker.setTint(0xff0000);
+    } else {
+      this.objectiveMarker.clearTint();
     }
     
     let targetX = 0; let targetY = 0;
