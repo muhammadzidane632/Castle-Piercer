@@ -197,7 +197,7 @@ const ENEMY_DEFS = {
 const NPCS = [
   { id: 'elder', name: 'Tetua Desa', object: 'elder', texture: 'yellow-monk-idle', animation: 'yellow-monk-idle', scale: 0.5, avatar: 'avatar-01', lines: ['Lindungi kastil ini, Ksatria.', 'Desa ini bergantung padamu.', 'Aku percaya padamu.'] },
   { id: 'blacksmith', name: 'Pandai Besi', object: 'blacksmith', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.52, avatar: 'avatar-18', lines: ['Bawa kayu dan emas, akan kuperbaiki segalanya.', 'Senjata terbaik butuh bahan terbaik.'] },
-  { id: 'captain', name: 'Kapten Jaga', object: 'captain', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.52, avatar: 'avatar-06', lines: ['Pos pertahanan aman, Ksatria.', 'Penjaga siap di posisi.'] },
+  { id: 'captain', name: 'Kapten Jaga', object: 'captain', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.52, avatar: 'avatar-02', lines: ['Pos pertahanan aman, Ksatria.', 'Penjaga siap di posisi.'] },
   { id: 'healer', name: 'Tabib', object: 'healer_south', texture: 'yellow-monk-idle', animation: 'yellow-monk-idle', scale: 0.46, avatar: 'avatar-03', lines: ['Sini, biar kuobati lukamu.', 'Istirahatlah sebentar.'] },
   { id: 'villager', name: 'Warga Desa', object: 'villager', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.48, avatar: 'avatar-08', lines: ['Tolong lindungi kami, Ksatria.', 'Anak-anak kami bersembunyi di bawah tanah.'] },
   { id: 'scout', name: 'Pengintai', object: 'scout', texture: 'yellow-pawn-gold-idle', animation: 'yellow-pawn-gold-idle', scale: 0.46, avatar: 'avatar-04', lines: ['Dari sini aku bisa lihat pergerakan musuh.', 'Musuh berkumpul di selatan.'] },
@@ -852,11 +852,12 @@ export class GameScene extends Phaser.Scene {
     }));
     this.questSubTexts = [];
     for (let i = 0; i < 3; i++) {
-      this.questSubTexts.push(fixed(this.add.text(756, 72 + i * 18, '', {
+      this.questSubTexts.push(fixed(this.add.text(756, 72, '', {
         fontFamily: 'Arial, sans-serif',
         fontSize: '12px',
         color: '#27333a',
         wordWrap: { width: 180 },
+        lineSpacing: 2,
       })));
     }
     this.questNavText = fixed(this.add.text(756, 138, '', {
@@ -907,7 +908,7 @@ export class GameScene extends Phaser.Scene {
       fontFamily: 'Arial, sans-serif', fontSize: '12px', color: '#d4f5a0',
     }).setOrigin(0.5), 10025).setVisible(false).setAlpha(0);
     // Continue prompt
-    this.dialogContinue = fixed(this.add.text(700, 548, '▶ Lanjutkan', {
+    this.dialogContinue = fixed(this.add.text(700, 548, '> Lanjutkan', {
       fontFamily: 'Arial Black', fontSize: '12px', color: '#ffd700', stroke: '#16242c', strokeThickness: 2,
     }).setOrigin(0.5).setInteractive({ cursor: 'pointer' }), 10025).setVisible(false).setAlpha(0);
     // Response hover effects
@@ -2231,11 +2232,12 @@ export class GameScene extends Phaser.Scene {
     this.hudPanel.lineStyle(2, 0xb4885e, 0.9);
     this.hudPanel.strokeRoundedRect(16, 156, 310, 160, 6);
 
+    const panelHeight = this.questPanelHeight || 145;
     this.questPanel.clear();
     this.questPanel.fillStyle(0xf1dfad, 0.92);
-    this.questPanel.fillRoundedRect(740, 20, 210, 145, 6);
+    this.questPanel.fillRoundedRect(740, 20, 210, panelHeight, 6);
     this.questPanel.lineStyle(3, 0x6b4b31, 0.82);
-    this.questPanel.strokeRoundedRect(740, 20, 210, 145, 6);
+    this.questPanel.strokeRoundedRect(740, 20, 210, panelHeight, 6);
 
     const remaining = this.totalEnemyCount();
     const phaseLabel = this.getPhaseLabel();
@@ -2838,10 +2840,9 @@ export class GameScene extends Phaser.Scene {
   showChainStep(index) {
     if (!this.dialogChain || index >= this.dialogChain.length) {
       // Chain finished
+      const cb = this.dialogOnComplete;
       this.closeDialog();
-      if (this.dialogOnComplete) {
-        const cb = this.dialogOnComplete;
-        this.dialogOnComplete = null;
+      if (cb) {
         cb();
       }
       return;
@@ -2910,12 +2911,12 @@ export class GameScene extends Phaser.Scene {
     this.questState.subQuestProgress += 1;
     
     // Show completion floating text
-    this.spawnFloatingText(this.player.x, this.player.y - 70, `✓ ${completedQuest.title}`, '#ffd700');
+    this.spawnFloatingText(this.player.x, this.player.y - 70, `[SELESAI] ${completedQuest.title}`, '#ffd700');
     
     // Check if all sub-quests are done
     if (this.questState.subQuestProgress >= chapter.subQuests.length) {
       this.questState.mainQuestReady = true;
-      this.spawnFloatingText(this.player.x, this.player.y - 90, '⚔ MISI UTAMA TERBUKA!', '#ff8800');
+      this.spawnFloatingText(this.player.x, this.player.y - 90, '[ MISI UTAMA TERBUKA ]', '#ff8800');
     }
     
     this.updateQuestTracker();
@@ -2928,33 +2929,41 @@ export class GameScene extends Phaser.Scene {
     
     this.questChapterText.setText(chapter.title);
     
-    const lockIcon = this.questState.mainQuestReady ? '⚔' : '🔒';
+    const lockIcon = this.questState.mainQuestReady ? '[*]' : '[Terkunci]';
     this.questMainText.setText(`${lockIcon} ${chapter.mainQuest.title}`);
     this.questMainText.setColor(this.questState.mainQuestReady ? '#2d6a1e' : '#8b4513');
     
     // Sub-quest list
+    let currentY = 72;
     for (let i = 0; i < 3; i++) {
       if (i < chapter.subQuests.length) {
         const sq = chapter.subQuests[i];
         const done = i < this.questState.subQuestProgress;
         const active = i === this.questState.subQuestProgress && !this.questState.mainQuestReady;
-        const icon = done ? '☑' : (active ? '▸' : '☐');
+        const icon = done ? '[X]' : (active ? ' >' : '[ ]');
         this.questSubTexts[i].setText(`${icon} ${sq.title}`);
         this.questSubTexts[i].setColor(done ? '#4a7c59' : (active ? '#1a5276' : '#888888'));
+        this.questSubTexts[i].setPosition(756, currentY);
         this.questSubTexts[i].setVisible(true);
+        currentY += this.questSubTexts[i].height + 6;
       } else {
         this.questSubTexts[i].setVisible(false);
       }
     }
     
     // Navigation hint
+    currentY += 4;
+    this.questNavText.setPosition(756, currentY);
     if (this.questState.mainQuestReady) {
       const triggerNpc = NPCS.find(n => n.id === chapter.mainQuest.triggerNpc);
-      this.questNavText.setText(`📍 ${triggerNpc ? triggerNpc.name : 'Tetua Desa'}`);
+      this.questNavText.setText(`Lokasi: ${triggerNpc ? triggerNpc.name : 'Tetua Desa'}`);
     } else {
       const activeQuest = chapter.subQuests[this.questState.subQuestProgress];
-      this.questNavText.setText(activeQuest ? `📍 ${activeQuest.hint}` : '');
+      this.questNavText.setText(activeQuest ? `Lokasi: ${activeQuest.hint}` : '');
     }
+    
+    // Update panel height
+    this.questPanelHeight = Math.max(145, currentY - 20 + this.questNavText.height + 14);
   }
 
   updateQuestMarkers() {
@@ -2970,7 +2979,7 @@ export class GameScene extends Phaser.Scene {
         // Show marker on main quest trigger NPC
         if (npc.npcData.id === chapter.mainQuest.triggerNpc) {
           npc.questMarker.setVisible(true);
-          npc.questMarker.setText('⚔');
+          npc.questMarker.setText('*');
         }
       } else {
         // Show marker on active sub-quest NPC
