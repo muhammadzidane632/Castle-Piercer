@@ -34,7 +34,7 @@ export class StartScene extends Phaser.Scene {
       strokeThickness: 3,
     }).setOrigin(0.5);
 
-    this.add.text(width / 2, 137, 'Defend the village, survive the red waves, then lead the counter attack into their basecamp.', {
+    this.add.text(width / 2, 137, 'Pertahankan desa, bertahan dari gelombang pasukan merah, lalu pimpin serangan balik ke markas mereka!', {
       fontFamily: 'Arial, sans-serif',
       fontSize: '18px',
       color: '#2a1e1b',

@@ -30,7 +30,7 @@ export class EndScene extends Phaser.Scene {
     titlePanel.lineStyle(4, won ? 0x4f6b3a : 0x6b4b31, 0.84);
     titlePanel.strokeRoundedRect(width / 2 - 300, 42, 600, 138, 8);
 
-    this.add.text(width / 2, 92, won ? 'BASECAMP HANCUR' : 'KERAJAAN RUNTUH', {
+    this.add.text(width / 2, 92, won ? 'MARKAS MERAH HANCUR!' : 'KERAJAAN RUNTUH', {
       fontFamily: 'Georgia, serif',
       fontSize: won ? '36px' : '31px',
       color: won ? '#2b3721' : '#3d2530',
@@ -39,10 +39,10 @@ export class EndScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     this.add.text(width / 2, 146, won
-      ? 'Castle Piercer selamat. Warga bertahan, castle berdiri, dan panji merah padam.'
+      ? 'Kastil berdiri tegak. Warga selamat, dan panji merah telah padam. Aran gugur sebagai pahlawan — pengorbanannya tidak akan dilupakan.'
       : (this.reason === 'castle'
-        ? 'Castle jatuh sebelum pasukan merah dipukul mundur.'
-        : 'Hero gugur sebelum serangan balik selesai.'), {
+        ? 'Kastil jatuh sebelum pasukan merah berhasil dipukul mundur. Desa kita... musnah.'
+        : 'Ksatria gugur sebelum serangan balik selesai. Harapan terakhir kita sirna.'), {
       fontFamily: 'Arial, sans-serif',
       fontSize: '16px',
       color: won ? '#2b3721' : '#3d2530',
@@ -67,10 +67,10 @@ export class EndScene extends Phaser.Scene {
     }
 
     const scoreLines = [
-      `Wave: ${this.stats.wave ?? 0}/${this.stats.maxWaves ?? 3}`,
-      `Castle: ${this.stats.castleHp ?? 0}/${this.stats.castleMaxHp ?? 0}`,
-      `Kills: ${this.stats.kills ?? 0}`,
-      `Score: ${this.stats.score ?? 0}`,
+      `Gelombang: ${this.stats.wave ?? 0}/${this.stats.maxWaves ?? 3}`,
+      `Kastil: ${this.stats.castleHp ?? 0}/${this.stats.castleMaxHp ?? 0}`,
+      `Bunuh: ${this.stats.kills ?? 0}`,
+      `Skor: ${this.stats.score ?? 0}`,
     ];
 
     this.add.text(width / 2, height / 2 + 142, scoreLines.join('   '), {

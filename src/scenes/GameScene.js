@@ -64,43 +64,51 @@ const RESOURCE_NODES = [
 
 const WAVE_CONFIGS = [
   {
-    chapter: 1, chapterTitle: 'Chapter 1: The Outskirts', title: 'Wave 1 - West Scouts',
-    dialog: 'Red scouts are advancing from the western tower. Hold them off!',
+    chapter: 1, chapterTitle: 'Bab 1: Bayangan di Perbatasan', title: 'Gelombang 1 - Pengintai Barat',
+    speaker: 'Tetua Desa',
+    dialog: 'Pengintai pasukan merah terlihat dari arah menara barat! Hadang mereka sebelum mereka sampai ke kastil, Ksatria!',
     units: [{ kind: 'grunt', count: 4, spawn: 'enemy_spawn_west' }],
   },
   {
-    chapter: 2, chapterTitle: 'Chapter 2: The Barracks', title: 'Wave 2 - Central Push',
-    dialog: 'Archers from the central barracks have joined the assault. Stay sharp!',
+    chapter: 2, chapterTitle: 'Bab 2: Barak Musuh', title: 'Gelombang 2 - Serangan Tengah',
+    speaker: 'Pandai Besi',
+    dialog: 'Pemanah dari barak pusat sudah bergabung dengan pasukan penyerang! Hati-hati, mereka menembak dari jauh!',
     units: [{ kind: 'grunt', count: 4, spawn: 'enemy_spawn_south' }, { kind: 'archer', count: 3, spawn: 'enemy_spawn_south' }],
   },
   {
-    chapter: 3, chapterTitle: 'Chapter 3: The East Keep', title: 'Wave 3 - Knights',
-    dialog: 'The eastern castle is deploying heavy knights! Defend the bridge!',
+    chapter: 3, chapterTitle: 'Bab 3: Benteng Timur', title: 'Gelombang 3 - Ksatria Berat',
+    speaker: 'Kapten Jaga',
+    dialog: 'Benteng timur mengirim ksatria berat ke arah kita! Pertahankan jembatan, jangan biarkan mereka lewat!',
     units: [{ kind: 'grunt', count: 2, spawn: 'enemy_spawn_east' }, { kind: 'raider', count: 4, spawn: 'enemy_spawn_east' }, { kind: 'brute', count: 1, spawn: 'enemy_spawn_east' }],
   },
   {
-    chapter: 4, chapterTitle: 'Chapter 4: Two-Pronged Attack', title: 'Wave 4 - Encirclement',
-    dialog: 'They are attacking from the west and the center simultaneously!',
+    chapter: 4, chapterTitle: 'Bab 4: Serangan Dua Arah', title: 'Gelombang 4 - Pengepungan',
+    speaker: 'Warga Desa',
+    dialog: 'Mereka menyerang dari barat dan selatan sekaligus! Desa kita dikepung! Tolong lindungi kami, Ksatria!',
     units: [{ kind: 'grunt', count: 5, spawn: 'enemy_spawn_west' }, { kind: 'brute', count: 2, spawn: 'enemy_spawn_west' }, { kind: 'archer', count: 4, spawn: 'enemy_spawn_south' }],
   },
   {
-    chapter: 5, chapterTitle: 'Chapter 5: The Far Borders', title: 'Wave 5 - Flanking Maneuver',
-    dialog: 'Watch out! Raiders are pouring in from the far edges of the map!',
+    chapter: 5, chapterTitle: 'Bab 5: Perbatasan Jauh', title: 'Gelombang 5 - Manuver Sayap',
+    speaker: 'Tetua Desa',
+    dialog: 'Penyusup datang dari perbatasan paling jauh! Bagaimana mereka tahu jalur rahasia kita? Aku curiga ada mata-mata di antara kita...',
     units: [{ kind: 'raider', count: 5, spawn: 'enemy_spawn_far_left' }, { kind: 'raider', count: 5, spawn: 'enemy_spawn_far_right' }],
   },
   {
-    chapter: 6, chapterTitle: 'Chapter 6: The Southern Swarm', title: 'Wave 6 - Deep South',
-    dialog: 'A massive swarm is coming from the bottom corners!',
+    chapter: 6, chapterTitle: 'Bab 6: Gelombang Selatan', title: 'Gelombang 6 - Serbuan Massal',
+    speaker: 'Tabib',
+    dialog: 'Banyak prajurit kita yang terluka parah... Dan sekarang gelombang besar datang dari selatan! Bertahanlah, aku akan merawat yang bisa diselamatkan!',
     units: [{ kind: 'grunt', count: 6, spawn: 'enemy_spawn_bottom_left' }, { kind: 'archer', count: 6, spawn: 'enemy_spawn_bottom_right' }],
   },
   {
-    chapter: 7, chapterTitle: 'Chapter 7: Counter Attack', title: 'Wave 7 - Pushing Forward',
-    dialog: 'The Red faction is falling back! Lead our forces, cross the bridge and attack their base!',
+    chapter: 7, chapterTitle: 'Bab 7: Serangan Balik!', title: 'Gelombang 7 - Maju ke Depan',
+    speaker: 'Aran',
+    dialog: 'Ksatria, ini aku, Aran! Maafkan aku... Akulah yang membocorkan posisi kita ke musuh. Keluargaku disandera mereka. Tapi sekarang aku ingin menebus dosaku — biar kutunjukkan jalan ke markas mereka!',
     units: [{ kind: 'brute', count: 8, spawn: 'enemy_base_core' }, { kind: 'archer', count: 4, spawn: 'boss_spawn' }],
   },
   {
-    chapter: 8, chapterTitle: 'Chapter 8: Breaking the Line', title: 'Wave 8 - Base Defenders',
-    dialog: 'They are trying to defend the Red Castle! Break through their defenses!',
+    chapter: 8, chapterTitle: 'Bab 8: Menembus Garis Pertahanan', title: 'Gelombang 8 - Penjaga Markas',
+    speaker: 'Aran',
+    dialog: 'Lewat sini! Aku tahu titik lemah pertahanan mereka. Mereka menyimpan pasukan terkuat di dalam kastil merah. Kita harus cepat sebelum mereka menyadari kehadiran kita!',
     units: [
       { kind: 'brute', count: 3, spawn: 'enemy_base_core' }, { kind: 'archer', count: 4, spawn: 'boss_spawn' },
       { kind: 'raider', count: 4, spawn: 'enemy_base_core' }, { kind: 'grunt', count: 4, spawn: 'boss_spawn' },
@@ -108,8 +116,9 @@ const WAVE_CONFIGS = [
     ],
   },
   {
-    chapter: 9, chapterTitle: 'Chapter 9: The Red Banner', title: 'Wave 9 - Last Stand',
-    dialog: 'They are making a last stand at the Red Castle base! Keep pushing!',
+    chapter: 9, chapterTitle: 'Bab 9: Panji Merah', title: 'Gelombang 9 - Pertahanan Terakhir',
+    speaker: 'Pandai Besi',
+    dialog: 'Ini pedang terakhir yang bisa kutempa. Gunakan dengan bijak, Ksatria! Pasukan merah bertahan mati-matian di kastil mereka. Satu serangan lagi dan panji merah akan jatuh!',
     units: [
       { kind: 'brute', count: 5, spawn: 'enemy_base_core' }, { kind: 'archer', count: 5, spawn: 'boss_spawn' },
       { kind: 'raider', count: 5, spawn: 'enemy_base_core' }, { kind: 'brute', count: 3, spawn: 'boss_spawn' },
@@ -117,8 +126,9 @@ const WAVE_CONFIGS = [
     ],
   },
   {
-    chapter: 10, chapterTitle: 'Chapter 10: The Grand Finale', title: 'Wave 10 - Twin Lancers',
-    dialog: 'Two Black Lancers are guarding the Red Castle! Defeat them and end this war!',
+    chapter: 10, chapterTitle: 'Bab 10: Pertempuran Terakhir', title: 'Gelombang 10 - Dua Tombak Hitam',
+    speaker: 'Aran',
+    dialog: 'Dua Tombak Hitam menjaga kastil merah! Aku akan mengalihkan perhatian yang satu — kau hadapi yang lainnya! Ini pertempuran terakhir kita, Ksatria. Akhiri perang ini!',
     units: [
       { kind: 'boss', count: 1, spawn: 'enemy_base_core' }, { kind: 'boss', count: 1, spawn: 'boss_spawn' },
       { kind: 'brute', count: 6, spawn: 'enemy_base_core' }
@@ -182,47 +192,54 @@ const ENEMY_DEFS = {
 const NPCS = [
   {
     id: 'elder',
-    name: 'Village Elder',
+    name: 'Tetua Desa',
     object: 'elder',
     texture: 'yellow-monk-idle',
     animation: 'yellow-monk-idle',
     scale: 0.5,
     lines: [
-      'The red army is coming from the eastern road. Protect the castle, hero.',
-      'If the castle falls, our village is lost.',
+      'Pasukan merah datang dari jalur timur. Lindungi kastil ini, Ksatria.',
+      'Jika kastil jatuh, seluruh desa kita akan musnah.',
+      'Aku sudah hidup lama di desa ini. Belum pernah aku melihat ancaman sebesar ini.',
     ],
   },
   {
     id: 'blacksmith',
-    name: 'Blacksmith',
+    name: 'Pandai Besi',
     object: 'blacksmith',
     texture: 'yellow-pawn-gold-idle',
     animation: 'yellow-pawn-gold-idle',
     scale: 0.52,
     lines: [
-      'Bring wood and gold. I can repair walls, sharpen your blade, or call another guard.',
+      'Bawa kayu dan emas. Aku bisa perbaiki tembok, asah pedangmu, atau panggil penjaga baru.',
+      'Pedangmu sudah tumpul, Ksatria. Bawa 15 emas dan akan kuasah sampai tajam.',
+      'Setiap prajurit butuh senjata yang layak. Jangan pelit dengan peralatanmu!',
     ],
   },
   {
     id: 'healer',
-    name: 'Healer',
+    name: 'Tabib',
     object: 'healer',
     texture: 'yellow-monk-idle',
     animation: 'yellow-monk-idle',
     scale: 0.46,
     lines: [
-      'Stand with the village and I will patch your wounds between battles.',
+      'Tetap dekat denganku di antara pertempuran, akan kuobati lukamu.',
+      'Banyak yang terluka hari ini. Tapi selama kita masih berdiri, masih ada harapan.',
+      'Istirahatlah sebentar, Ksatria. Tubuhmu butuh pemulihan sebelum gelombang berikutnya.',
     ],
   },
   {
     id: 'villager',
-    name: 'Villager',
+    name: 'Warga Desa',
     object: 'villager',
     texture: 'yellow-pawn-gold-idle',
     animation: 'yellow-pawn-gold-idle',
     scale: 0.48,
     lines: [
-      'Their basecamp is beyond the lower bridge. Survive the waves, then strike their banner.',
+      'Markas musuh ada di seberang jembatan bawah. Bertahan dari gelombang mereka, lalu serang panji mereka!',
+      'Aku dengar bisik-bisik... katanya ada pengkhianat di antara kita. Hati-hati, Ksatria.',
+      'Anak-anak kami bersembunyi di bawah tanah. Tolong jangan biarkan musuh sampai ke sini.',
     ],
   },
 ];
@@ -299,8 +316,8 @@ export class GameScene extends Phaser.Scene {
     this.createInput();
     this.setupPhysics();
     this.setupCamera();
-    this.showDialog('Village Elder', 'Castle Piercer has one night to survive. Talk to the elder, rally the guard, then hold the castle.', 5200);
-    this.setObjective('Talk to the village elder.', 'elder');
+    this.showDialog('Tetua Desa', 'Kastil kita hanya punya satu malam untuk bertahan. Bicara dengan Tetua Desa, kumpulkan penjaga, dan pertahankan kastil sampai fajar!', 5200);
+    this.setObjective('Bicara dengan Tetua Desa.', 'elder');
   }
 
   createMap() {
@@ -403,7 +420,7 @@ export class GameScene extends Phaser.Scene {
       .setStrokeStyle(2, 0xffe0a3, 0.82)
       .setFillStyle(0x000000, 0)
       .setDepth(this.castleAttackPoint.y + 7);
-    this.castleWorldHpLabel = this.add.text(this.castleAttackPoint.x, barY - 14, 'CASTLE', {
+    this.castleWorldHpLabel = this.add.text(this.castleAttackPoint.x, barY - 14, 'KASTIL', {
       fontFamily: 'Arial Black, Arial, sans-serif',
       fontSize: '10px',
       color: '#64b5f6',
@@ -615,7 +632,7 @@ export class GameScene extends Phaser.Scene {
     }));
 
     this.objectivePanel = fixed(this.add.graphics());
-    this.objectiveTitle = fixed(this.add.text(756, 34, 'OBJECTIVE', {
+    this.objectiveTitle = fixed(this.add.text(756, 34, 'MISI', {
       fontFamily: 'Arial Black, Arial, sans-serif',
       fontSize: '11px',
       color: '#6b4b31',
@@ -628,7 +645,7 @@ export class GameScene extends Phaser.Scene {
       lineSpacing: 4,
     }));
     
-    this.interactionHint = fixed(this.add.text(400, 480, 'Press [E] to interact', {
+    this.interactionHint = fixed(this.add.text(400, 480, 'Tekan [E] untuk bicara', {
       fontFamily: 'Arial Black',
       fontSize: '14px',
       color: '#ffffff',
@@ -671,10 +688,10 @@ export class GameScene extends Phaser.Scene {
     };
     this.upgradePanel = fixed(this.add.graphics()).setVisible(false);
     this.upgradeButtons = [
-      this.createUpgradeButton(860, 438, 'Repair Castle', '5 wood', () => this.repairCastle()),
-      this.createUpgradeButton(860, 478, 'Sharpen Blade', '15 gold', () => this.upgradeBlade()),
-      this.createUpgradeButton(860, 518, 'Call Guard', '10 gold', () => this.hireGuard()),
-      this.createUpgradeButton(860, 558, 'Lifesteal', '25 gold', () => this.buyLifesteal()),
+      this.createUpgradeButton(860, 438, 'Perbaiki Kastil', '5 kayu', () => this.repairCastle()),
+      this.createUpgradeButton(860, 478, 'Asah Pedang', '15 emas', () => this.upgradeBlade()),
+      this.createUpgradeButton(860, 518, 'Panggil Penjaga', '10 emas', () => this.hireGuard()),
+      this.createUpgradeButton(860, 558, 'Curi Nyawa', '25 emas', () => this.buyLifesteal()),
     ];
   }
 
@@ -756,7 +773,7 @@ export class GameScene extends Phaser.Scene {
       this.redBaseBarrier, 
       () => {
         if (!this.barrierHintTime || this.time.now > this.barrierHintTime) {
-          this.spawnFloatingText(this.player.x, this.player.y - 40, "The Red Base is locked until Chapter 7!", "#ff8888");
+          this.spawnFloatingText(this.player.x, this.player.y - 40, "Markas Merah terkunci sampai Bab 7!", "#ff8888");
           this.barrierHintTime = this.time.now + 2000;
         }
       }, 
@@ -1109,13 +1126,37 @@ export class GameScene extends Phaser.Scene {
     
     if (data.id === 'elder') {
       if (this.stats.phase === 'intro') {
-        line = 'The first red scouts are already on the road. Prepare yourself!';
+        line = 'Pengintai merah pertama sudah terlihat di jalur. Bersiaplah, Ksatria!';
         this.time.delayedCall(2000, () => this.startWave(1));
       } else if (this.stats.phase === 'waiting') {
-        line = 'The enemies are regrouping. Defend the castle with your life!';
+        line = 'Musuh sedang menghimpun kekuatan. Pertahankan kastil dengan nyawamu!';
         this.time.delayedCall(2000, () => this.startWave(this.stats.wave + 1));
       } else if (this.stats.phase === 'defense') {
-        line = 'Focus on the enemies! Protect the castle!';
+        line = 'Fokus ke musuh! Jangan biarkan kastil jatuh!';
+      } else if (this.stats.phase === 'counter' || this.stats.phase === 'final') {
+        line = 'Kastil kita masih berdiri. Sekarang saatnya membalas mereka!';
+      }
+    } else if (data.id === 'blacksmith') {
+      if (this.stats.phase === 'defense') {
+        line = 'Aku tidak bisa menempa saat pertempuran berlangsung! Selesaikan dulu gelombangnya!';
+      } else if (this.stats.phase === 'waiting') {
+        line = 'Cepat, manfaatkan waktu istirahat ini! Perbaiki kastil atau asah pedangmu sebelum gelombang berikutnya!';
+      } else if (this.stats.phase === 'counter' || this.stats.phase === 'final') {
+        line = 'Kau sudah dekat dengan kemenangan! Hancurkan markas merah itu!';
+      }
+    } else if (data.id === 'healer') {
+      if (this.stats.phase === 'defense') {
+        line = 'Bertahanlah, Ksatria! Selesaikan pertempuran ini dulu, baru aku bisa mengobatimu.';
+      } else if (this.stats.phase === 'counter' || this.stats.phase === 'final') {
+        line = 'Lukamu parah... Sini, biar kuobati sebelum kau maju lagi ke markas mereka.';
+      }
+    } else if (data.id === 'villager') {
+      if (this.stats.phase === 'defense') {
+        line = 'Musuh masih menyerang! Kami bersembunyi di sini, tolong lindungi desa kami!';
+      } else if (this.stats.phase === 'waiting') {
+        line = 'Terima kasih sudah melindungi kami, Ksatria. Tapi aku khawatir gelombang berikutnya akan lebih besar...';
+      } else if (this.stats.wave >= 5) {
+        line = 'Ada yang aneh... Bagaimana musuh bisa tahu semua jalur rahasia kita? Pasti ada mata-mata!';
       }
     }
 
@@ -1123,7 +1164,7 @@ export class GameScene extends Phaser.Scene {
 
     if (data.id === 'healer' && (this.stats.phase === 'waiting' || this.stats.phase === 'counter' || this.stats.phase === 'final')) {
       this.healPlayer(2);
-      this.spawnFloatingText(this.player.x, this.player.y - 58, 'HEAL', '#bdf7c5');
+      this.spawnFloatingText(this.player.x, this.player.y - 58, 'SEMBUH', '#bdf7c5');
     }
   }
 
@@ -1140,14 +1181,14 @@ export class GameScene extends Phaser.Scene {
     this.waveStartTime = this.time.now;
     this.lastWaveEnemyCount = 0;
     this.lastWaveProgressTime = this.time.now;
-    this.showDialog(wave.chapterTitle || wave.title, wave.dialog, 4300);
+    this.showDialog(wave.speaker || wave.chapterTitle || wave.title, wave.dialog, 4300);
     
     if (waveNumber >= 7) {
-      this.setObjective(`Wave ${waveNumber}: Attack the Red Basecamp!`, this.enemyBasePoint);
+      this.setObjective(`Gelombang ${waveNumber}: Serang Markas Merah!`, this.enemyBasePoint);
       this.enemyCoreGlow.setVisible(true);
       this.enemyCoreFire.setVisible(true);
     } else {
-      this.setObjective(`Survive ${wave.title}. Protect the castle.`, null);
+      this.setObjective(`Bertahan ${wave.title}. Lindungi kastil.`, null);
     }
 
     if (this.waveSpawnEvent) {
@@ -1185,10 +1226,20 @@ export class GameScene extends Phaser.Scene {
     // Player HP upgrade: +1 max HP per wave completed
     this.stats.playerMaxHp += 1;
     this.healPlayer(2, false);
-    this.spawnFloatingText(this.player.x, this.player.y - 70, '+1 MAX HP!', '#00ff88');
+    this.spawnFloatingText(this.player.x, this.player.y - 70, '+1 HP MAKS!', '#00ff88');
     
-    this.showDialog('Blacksmith', 'Quickly repair, train, or call another guard before the next wave.', 4600);
-    this.setObjective(`Talk to the Village Elder to start Wave ${this.stats.wave + 1}.`, 'elder');
+    const prepDialogs = [
+      { speaker: 'Tetua Desa', line: 'Bagus! Tapi ini baru permulaan. Perkuat pertahananmu selagi sempat, Ksatria!' },
+      { speaker: 'Pandai Besi', line: 'Pedangmu tumpul dan temboknya retak. Bawa emas dan kayu, biar kuperbaiki semuanya!' },
+      { speaker: 'Tabib', line: 'Banyak yang terluka... Istirahatlah sebentar. Aku akan merawat yang bisa diselamatkan.' },
+      { speaker: 'Warga Desa', line: 'Aku dengar bisik-bisik soal pengkhianat di antara kita... Hati-hati, Ksatria.' },
+      { speaker: 'Tetua Desa', line: 'Bagaimana musuh bisa tahu jalur rahasia kita? Ada mata-mata! Kita harus waspada!' },
+      { speaker: 'Pandai Besi', line: 'Ini senjata terakhirku. Aku sudah menempa semua yang bisa kutempa. Gunakan dengan bijak!' },
+    ];
+    const prepIdx = Math.min(this.stats.wave - 1, prepDialogs.length - 1);
+    const prep = prepDialogs[prepIdx];
+    this.showDialog(prep.speaker, prep.line, 4600);
+    this.setObjective(`Bicara dengan Tetua Desa untuk memulai Gelombang ${this.stats.wave + 1}.`, 'elder');
   }
 
   unlockCounterAttack() {
@@ -1197,8 +1248,8 @@ export class GameScene extends Phaser.Scene {
     this.enemyCoreGlow.setVisible(true);
     this.enemyCoreFire.setVisible(true);
     this.spawnBaseDefenders();
-    this.showDialog('Village Elder', 'The castle stands. Now cross the bridge and break the red basecamp.', 5600);
-    this.setObjective('Go to the red basecamp and defeat the black lancer.', this.enemyBasePoint);
+    this.showDialog('Tetua Desa', 'Kastil kita masih berdiri tegak! Sekarang seberangi jembatan dan hancurkan markas pasukan merah!', 5600);
+    this.setObjective('Pergi ke markas merah dan kalahkan Tombak Hitam.', this.enemyBasePoint);
   }
 
   spawnBaseDefenders() {
@@ -1351,7 +1402,7 @@ export class GameScene extends Phaser.Scene {
       this.sfx.hit();
       if (this.stats.lifestealLevel > 0 && Math.random() < (0.12 * this.stats.lifestealLevel)) {
          this.healPlayer(1);
-         this.spawnFloatingText(this.player.x, this.player.y - 48, '+HP', '#ff5555');
+         this.spawnFloatingText(this.player.x, this.player.y - 48, '+NYAWA', '#ff5555');
       }
     }
 
@@ -1426,7 +1477,7 @@ export class GameScene extends Phaser.Scene {
     this.healPlayer(Math.ceil(this.stats.playerMaxHp / 2));
     this.stats.castleHp = Math.min(this.stats.castleMaxHp, this.stats.castleHp + 10);
     this.syncCastleWorldHpBar();
-    this.spawnFloatingText(this.player.x, this.player.y - 60, 'HOLY HEAL!', '#00ff00');
+    this.spawnFloatingText(this.player.x, this.player.y - 60, 'PENYEMBUHAN SUCI!', '#00ff00');
     
     const aura = this.add.circle(this.player.x, this.player.y, 220, 0x00ff00, 0.4).setDepth(this.player.y + 10);
     this.tweens.add({ targets: aura, scale: 1.5, alpha: 0, duration: 1000, onComplete: () => aura.destroy() });
@@ -1434,7 +1485,7 @@ export class GameScene extends Phaser.Scene {
     this.guards.children.iterate((guard) => {
       if (guard?.active && Phaser.Math.Distance.Between(this.player.x, this.player.y, guard.x, guard.y) < 220) {
          guard.ai.health = guard.ai.maxHealth;
-         this.spawnFloatingText(guard.x, guard.y - 40, '+HP', '#00ff00');
+         this.spawnFloatingText(guard.x, guard.y - 40, '+NYAWA', '#00ff00');
          this.syncGuardHp(guard);
       }
     });
@@ -1517,8 +1568,8 @@ export class GameScene extends Phaser.Scene {
     if (ai.boss) {
       this.bossDefeated = true;
       this.stats.phase = 'final';
-      this.showDialog('Red General', 'The banner guard has fallen. Break the core and end the raid.', 5000);
-      this.setObjective('Destroy the red base core.', this.enemyBasePoint);
+      this.showDialog('Aran', 'Penjaga panji sudah tumbang! Ksatria, ini kesempatanmu! Hancurkan inti markas mereka dan akhiri perang ini!', 5000);
+      this.setObjective('Hancurkan inti markas merah.', this.enemyBasePoint);
     }
   }
 
@@ -1616,12 +1667,12 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (this.stats.wood < 5 || this.stats.castleHp >= this.stats.castleMaxHp) {
-      this.showDialog('Blacksmith', 'I need more wood, or the castle is already steady.', 2600);
+      this.showDialog('Pandai Besi', 'Kayunya kurang, atau kastil sudah cukup kokoh.', 2600);
       return;
     }
     this.stats.wood -= 5;
     this.stats.castleHp = Math.min(this.stats.castleMaxHp, this.stats.castleHp + 8);
-    this.spawnFloatingText(this.castleAttackPoint.x, this.castleAttackPoint.y - 48, '+CASTLE', '#bdf7c5');
+    this.spawnFloatingText(this.castleAttackPoint.x, this.castleAttackPoint.y - 48, '+KASTIL', '#bdf7c5');
     this.syncCastleWorldHpBar();
     this.sfx.heal();
   }
@@ -1631,13 +1682,13 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (this.stats.gold < 15) {
-      this.showDialog('Blacksmith', 'The blade needs 15 gold.', 2600);
+      this.showDialog('Pandai Besi', 'Pedangnya butuh 15 emas untuk diasah.', 2600);
       return;
     }
     this.stats.gold -= 15;
     this.stats.bladeLevel += 1;
     this.stats.playerDamage += 1;
-    this.spawnFloatingText(this.player.x, this.player.y - 58, `DMG ${this.stats.playerDamage}`, '#ffd073');
+    this.spawnFloatingText(this.player.x, this.player.y - 58, `SERANGAN ${this.stats.playerDamage}`, '#ffd073');
     this.sfx.collect();
   }
 
@@ -1646,12 +1697,12 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (this.stats.gold < 25) {
-      this.showDialog('Blacksmith', 'Dark magic requires 25 gold.', 2600);
+      this.showDialog('Pandai Besi', 'Sihir gelap butuh 25 emas.', 2600);
       return;
     }
     this.stats.gold -= 25;
     this.stats.lifestealLevel += 1;
-    this.spawnFloatingText(this.player.x, this.player.y - 58, `LIFESTEAL ${this.stats.lifestealLevel}`, '#9966ff');
+    this.spawnFloatingText(this.player.x, this.player.y - 58, `CURI NYAWA ${this.stats.lifestealLevel}`, '#9966ff');
     this.sfx.collect();
   }
 
@@ -1660,13 +1711,13 @@ export class GameScene extends Phaser.Scene {
       return;
     }
     if (this.stats.gold < 10 || this.stats.guards >= this.guardHomePoints.length) {
-      this.showDialog('Blacksmith', 'I need more gold, or every guard post is already filled.', 2600);
+      this.showDialog('Pandai Besi', 'Emas tidak cukup, atau semua pos penjaga sudah terisi.', 2600);
       return;
     }
     this.stats.gold -= 10;
     this.spawnGuard(this.guardHomePoints[this.stats.guards]);
     this.stats.guards += 1;
-    this.showDialog('Guard Captain', 'A new guard has taken position at the wall.', 2600);
+    this.showDialog('Kapten Jaga', 'Penjaga baru sudah siap di posisinya!', 2600);
     this.sfx.collect();
   }
 
@@ -1865,17 +1916,17 @@ export class GameScene extends Phaser.Scene {
     const remaining = this.totalEnemyCount();
     const phaseLabel = this.getPhaseLabel();
     const currentWave = WAVE_CONFIGS[this.stats.wave - 1];
-    const chapterText = currentWave?.chapter ? `CH ${currentWave.chapter} - ` : '';
-    this.waveText.setText(`${chapterText}${phaseLabel}   ENEMY ${remaining}`);
+    const chapterText = currentWave?.chapter ? `BAB ${currentWave.chapter} - ` : '';
+    this.waveText.setText(`${chapterText}${phaseLabel}   MUSUH ${remaining}`);
     
     this.goldText.setText(`${this.stats.gold}`);
     this.woodText.setText(`${this.stats.wood}`);
-    this.statsText.setText(`KILLS ${this.stats.kills}   DMG ${this.stats.playerDamage}`);
+    this.statsText.setText(`BUNUH ${this.stats.kills}   SERANGAN ${this.stats.playerDamage}`);
 
     this.drawBar(this.playerHpBar, 26, 218, 135, 14, this.stats.playerHp, this.stats.playerMaxHp, 0xd94f4f, 'HP');
-    this.drawBar(this.castleHpBar, 176, 218, 135, 14, this.stats.castleHp, this.stats.castleMaxHp, 0x64b5f6, 'CASTLE');
+    this.drawBar(this.castleHpBar, 176, 218, 135, 14, this.stats.castleHp, this.stats.castleMaxHp, 0x64b5f6, 'KASTIL');
     if (this.counterUnlocked || this.stats.wave >= 10 || this.stats.phase === 'final' || this.stats.phase === 'counter') {
-      this.drawBar(this.baseHpBar, 756, 126, 158, 12, this.stats.baseHp, this.stats.baseMaxHp, 0xff675f, 'BASE');
+      this.drawBar(this.baseHpBar, 756, 126, 158, 12, this.stats.baseHp, this.stats.baseMaxHp, 0xff675f, 'MARKAS');
     } else {
       this.baseHpBar.clear();
     }
@@ -1936,18 +1987,18 @@ export class GameScene extends Phaser.Scene {
 
   getPhaseLabel() {
     if (this.stats.phase === 'intro') {
-      return 'INTRO';
+      return 'PERKENALAN';
     }
     if (this.stats.phase === 'waiting') {
-      return 'WAITING';
+      return 'PERSIAPAN';
     }
     if (this.stats.phase === 'counter') {
-      return 'COUNTER ATTACK';
+      return 'SERANGAN BALIK';
     }
     if (this.stats.phase === 'final') {
-      return 'DESTROY BASE';
+      return 'HANCURKAN MARKAS';
     }
-    return `WAVE ${this.stats.wave}/${this.stats.maxWaves}`;
+    return `GELOMBANG ${this.stats.wave}/${this.stats.maxWaves}`;
   }
 
   drawBar(graphics, x, y, width, height, value, max, color, label) {
@@ -2015,7 +2066,7 @@ export class GameScene extends Phaser.Scene {
     }
     // Update label
     if (this.castleWorldHpLabel) {
-      this.castleWorldHpLabel.setText(`CASTLE ${this.stats.castleHp}/${this.stats.castleMaxHp}`);
+      this.castleWorldHpLabel.setText(`KASTIL ${this.stats.castleHp}/${this.stats.castleMaxHp}`);
     }
   }
 
@@ -2084,7 +2135,7 @@ export class GameScene extends Phaser.Scene {
     });
     
     if (stuckEnemies.length > 0) {
-      this.spawnFloatingText(this.player.x, this.player.y - 60, `${stuckEnemies.length} stuck enemies cleared!`, '#ffaa00');
+      this.spawnFloatingText(this.player.x, this.player.y - 60, `${stuckEnemies.length} musuh macet dihapus!`, '#ffaa00');
     }
   }
 
