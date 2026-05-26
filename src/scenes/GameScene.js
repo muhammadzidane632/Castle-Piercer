@@ -1213,11 +1213,11 @@ export class GameScene extends Phaser.Scene {
     enemy.body.setSize(def.body[0], def.body[1]);
     enemy.body.setOffset(def.body[2], def.body[3]);
     
-    // Wave-based enemy scaling: enemies get stronger each wave
+    // Wave-based enemy scaling: reduced scaling so the game is easier to win
     const waveNum = this.stats.wave || 1;
-    const hpBonus = Math.ceil((waveNum - 1) * 1); // +1 HP per wave
-    const speedBonus = (waveNum - 1) * 3; // +3 speed per wave
-    const damageBonus = Math.floor((waveNum - 1) / 3); // +1 damage every 3 waves
+    const hpBonus = Math.floor((waveNum - 1) * 0.2); // Very slow HP scaling
+    const speedBonus = (waveNum - 1) * 1; // Mild speed scaling
+    const damageBonus = Math.floor((waveNum - 1) / 5); // +1 damage every 5 waves
     
     const scaledHp = def.hp + hpBonus;
     const scaledSpeed = def.speed + speedBonus;
